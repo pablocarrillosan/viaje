@@ -895,3 +895,54 @@ table.compare tbody tr.reco th, table.compare tbody tr.reco td { color: var(--ib
 @media (min-width: 861px) {
   .day__photo-wrap { position: sticky; top: calc(var(--nav-h) + 20px); }
 }
+
+/* ---------- 19. Planes F/G (colores de badge y columna) ------------------- */
+/* Colores adicionales para picos/alternativas añadidos más allá de A–E. */
+.plan__badge.f { background: rgba(58,125,92,.85); }   /* verde pino */
+.plan__badge.g { background: rgba(122,106,61,.85); }  /* ocre */
+table.compare thead th.plan-f { color: #3a7d5c; }
+table.compare thead th.plan-g { color: #7a6a3d; }
+
+/* ---------- 20. Bloque "Pueblos y paradas cerca" (.nearby) ---------------- */
+/* Sección secundaria al final de cada día: paradas de pueblo para tardes,
+   lluvia o descanso. Estética más ligera que las tarjetas de plan para no
+   restar protagonismo a la montaña. */
+.nearby {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  border-top: 1px dashed var(--roca);
+  padding-top: clamp(1.6rem, 4vw, 2.4rem);
+}
+.nearby__head {
+  display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+.nearby__head h4 { font-size: 1.3rem; letter-spacing: -0.02em; }
+.nearby__head .eyebrow { display: block; }
+.nearby__sub { color: var(--musgo); font-size: .92rem; }
+.nearby__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.town {
+  background: var(--nieve);
+  border: 1px solid var(--roca);
+  border-radius: var(--r-md);
+  padding: 1rem 1.1rem 1.1rem;
+  box-shadow: var(--sh-sm);
+  display: flex; flex-direction: column; gap: .5rem;
+}
+.town__name {
+  font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;
+  font-size: 1.08rem;
+}
+.town__meta {
+  display: flex; flex-wrap: wrap; gap: .35rem .9rem;
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .03em;
+  color: var(--musgo);
+}
+.town__meta span { display: inline-flex; align-items: center; gap: .35rem; }
+.town__meta svg { width: 14px; height: 14px; color: var(--ibon); flex-shrink: 0; }
+.town__desc { color: var(--musgo); font-size: .9rem; margin-top: .1rem; }
+.town__when { margin-top: auto; }
+.town__when .pill { font-size: .66rem; }
