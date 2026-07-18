@@ -1,0 +1,22 @@
+.root { padding-block: clamp(2rem, 5vw, 3rem); }
+.empty {
+  color: var(--musgo); font-size: 1rem; text-align: center;
+  padding: 2rem 1rem; border: 1px dashed var(--roca); border-radius: var(--r-md);
+  background: var(--nieve);
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.card {
+  background: var(--nieve); border: 1px solid var(--roca); border-left: 4px solid var(--ibon);
+  border-radius: var(--r-sm); padding: 1rem 1.1rem; box-shadow: var(--sh-sm);
+}
+.day { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--musgo); }
+.plan { font-size: 1.1rem; letter-spacing: -0.01em; margin: .15rem 0 .1rem; }
+.badge { font-family: var(--font-mono); font-size: .68rem; font-weight: 700; color: var(--ibon-600); }
+.foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 1.4rem; }
+.count { color: var(--musgo); font-size: .9rem; }
+.reset {
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--musgo); background: transparent; border: 1px solid var(--roca);
+  padding: .55rem .9rem; border-radius: var(--r-pill); cursor: pointer; transition: border-color .2s, color .2s;
+}
+.reset:hover { border-color: var(--warn); color: var(--warn); }

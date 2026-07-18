@@ -1,0 +1,37 @@
+/* Tema OSCURO scopeado: se redefinen los tokens dentro de .viaje. Como las
+   custom properties se heredan por cascada (no dependen del hash de clase),
+   todos los componentes hijos pasan a oscuro automáticamente. */
+.viaje {
+  color-scheme: dark;
+  --niebla: #102A22;
+  --niebla-2: #143026;
+  --nieve: #17392E;
+  --pizarra: #EAF3EF;
+  --musgo: #A9BEB6;
+  --musgo-2: #8AA69D;
+  --roca: rgba(255, 255, 255, .14);
+  --roca-2: rgba(255, 255, 255, .08);
+  --ibon: #3FD9C6;
+  --ibon-600: #8DEEE0;
+  --ibon-200: rgba(63, 217, 198, .34);
+  --ibon-100: rgba(63, 217, 198, .13);
+  --alpen: #F2B063;
+  --alpen-200: rgba(242, 176, 99, .35);
+  --alpen-100: rgba(242, 176, 99, .13);
+  --ok: #63E6C0;
+  --warn: #F2A86A;
+  --sh-sm: 0 1px 2px rgba(0, 0, 0, .25), 0 2px 10px rgba(0, 0, 0, .22);
+  --sh-md: 0 6px 18px rgba(0, 0, 0, .30), 0 16px 40px rgba(0, 0, 0, .30);
+  --sh-lg: 0 14px 40px rgba(0, 0, 0, .42), 0 40px 80px rgba(0, 0, 0, .42);
+  background: #102A22;
+  background-image: radial-gradient(1100px 480px at 100% -10%, rgba(63, 217, 198, .08), transparent 60%);
+  color: var(--pizarra);
+  padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+.viaje ::selection { background: rgba(63, 217, 198, .3); }
+.viaje :global(.section-title) { color: var(--pizarra); }
+
+.head { padding-top: clamp(2.6rem, 6vw, 4.5rem); }
+
+.panel { animation: vfade .35s ease both; }
+.panel :global(.reveal) { opacity: 1 !important; transform: none !important; animation: none !important; }

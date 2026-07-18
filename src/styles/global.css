@@ -1,0 +1,206 @@
+/* ============================================================================
+   Estilos GLOBALES: reset, tipografía base, utilidades de layout y clases
+   atómicas compartidas por varios componentes (.wrap, .eyebrow, .pill, .chip,
+   .rating/.dot, .tick/.cross, .mini-h) + animaciones. No son CSS Modules.
+   Portado literal de las secciones 2, 3, 4, 10 (atómicas) y 16 del CSS original.
+   ========================================================================== */
+
+/* ---------- Reset ligero -------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 12px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--pizarra);
+  background: var(--niebla);
+  line-height: 1.65;
+  font-size: clamp(15px, 0.6vw + 13.5px, 17px);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--ibon);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Tipografía ---------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: var(--pizarra);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: .74rem;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ibon);
+}
+
+.section-title {
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  margin: .35em 0 .35em;
+}
+
+.section-lead {
+  color: var(--musgo);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  max-width: 60ch;
+}
+
+/* ---------- Estructura / utilidades --------------------------------------- */
+.wrap {
+  width: min(100% - 2.4rem, var(--wrap));
+  margin-inline: auto;
+}
+
+.section { padding-block: clamp(4rem, 10vw, 8rem); }
+.section--tight { padding-block: clamp(3rem, 7vw, 5.5rem); }
+.section--dark  { background: var(--pino); color: #E7EDE7; }
+.section--alt   { background: var(--niebla-2); }
+
+.section-head { margin-bottom: clamp(2rem, 5vw, 3.4rem); }
+
+.contours {
+  background-image:
+    repeating-radial-gradient(circle at 18% 120%,
+      transparent 0, transparent 46px,
+      rgba(15,118,110,.05) 46px, rgba(15,118,110,.05) 47px),
+    repeating-radial-gradient(circle at 88% -20%,
+      transparent 0, transparent 54px,
+      rgba(18,51,42,.045) 54px, rgba(18,51,42,.045) 55px);
+}
+.section--dark.contours {
+  background-image:
+    repeating-radial-gradient(circle at 18% 120%,
+      transparent 0, transparent 46px,
+      rgba(191,225,220,.06) 46px, rgba(191,225,220,.06) 47px),
+    repeating-radial-gradient(circle at 88% -20%,
+      transparent 0, transparent 54px,
+      rgba(191,225,220,.05) 54px, rgba(191,225,220,.05) 55px);
+}
+
+/* Botones */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .95rem 1.7rem;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  font-size: .98rem;
+  letter-spacing: -0.01em;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+  will-change: transform;
+}
+.btn--primary {
+  background: var(--ibon);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(15,118,110,.28);
+}
+.btn--primary:hover { background: var(--ibon-600); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,118,110,.34); }
+.btn--ghost {
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.4);
+  backdrop-filter: blur(6px);
+}
+.btn--ghost:hover { background: rgba(255,255,255,.24); transform: translateY(-2px); }
+.btn .arw { transition: transform .25s ease; }
+.btn:hover .arw { transform: translateX(3px); }
+
+/* Etiquetas / píldoras */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: .34rem .7rem;
+  border-radius: var(--r-pill);
+  background: var(--ibon-100);
+  color: var(--ibon-600);
+  font-weight: 500;
+}
+.pill--amber { background: var(--alpen-100); color: var(--amber-ink); }
+.pill--rock  { background: var(--roca-2); color: var(--musgo); }
+
+/* ---------- Clases atómicas compartidas (secciones 10/12 originales) ------- */
+.mini-h {
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ibon); margin-top: 1.3rem; margin-bottom: .2rem;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .7rem; }
+.chip {
+  font-size: .82rem;
+  padding: .38rem .7rem;
+  border-radius: var(--r-pill);
+  background: var(--niebla-2);
+  border: 1px solid var(--roca);
+  color: var(--pizarra);
+}
+
+.rating { display: inline-flex; gap: 4px; align-items: center; }
+.rating .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--roca); }
+.rating .dot.on { background: var(--ibon); }
+.rating.amber .dot.on { background: var(--alpen); }
+
+.tick { color: var(--ok); font-weight: 700; }
+.cross { color: var(--warn); font-weight: 700; }
+.tick, .cross { display: inline-flex; align-items: center; gap: .3rem; }
+.tick svg, .cross svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+.pc-h {
+  font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--musgo); margin-bottom: .45rem;
+}
+
+/* ---------- Animaciones (globales) ---------------------------------------- */
+.reveal-load { opacity: 0; transform: translateY(22px); animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
+.d1 { animation-delay: .05s; } .d2 { animation-delay: .18s; }
+.d3 { animation-delay: .31s; } .d4 { animation-delay: .44s; } .d5 { animation-delay: .57s; }
+@keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+/* Reveal al hacer scroll — solo CSS con animation-timeline (mejora progresiva).
+   Si el navegador no lo soporta, el contenido se ve normal (no se oculta). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: rise both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 26%;
+    }
+  }
+}
+
+@keyframes vfade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal-load, .reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
+  * { transition-duration: .01ms !important; }
+}

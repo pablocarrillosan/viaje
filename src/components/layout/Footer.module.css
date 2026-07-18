@@ -1,0 +1,11 @@
+.footer {
+  background: var(--pino-900);
+  color: #cfe0da;
+  padding-block: clamp(3rem, 6vw, 4.5rem);
+  text-align: center;
+}
+.footer h3 { color: #fff; font-size: clamp(1.6rem, 4vw, 2.6rem); }
+.footer p { color: #9dc7be; max-width: 52ch; margin: .8rem auto 0; }
+.meta { margin-top: 2rem; font-family: var(--font-mono); font-size: .74rem; letter-spacing: .08em; color: #7fa89f; }
+.peaks { margin-top: 2.4rem; opacity: .5; }
+.peaks svg { width: 100%; max-width: 640px; margin-inline: auto; height: auto; }

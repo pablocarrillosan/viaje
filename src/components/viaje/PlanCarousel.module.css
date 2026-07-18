@@ -1,0 +1,25 @@
+.head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; margin: clamp(2rem, 5vw, 3rem) 0 1.2rem;
+  flex-wrap: wrap;
+}
+.head h4 { font-size: 1.4rem; }
+.hint {
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em;
+  color: var(--musgo-2); text-transform: uppercase; display: inline-flex; align-items: center; gap: .4rem;
+}
+.hint svg { width: 16px; height: 16px; }
+
+.carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(88%, 380px);
+  gap: 1.2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 1.2rem;
+  padding: .4rem .2rem 1.4rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.carousel::-webkit-scrollbar { display: none; }

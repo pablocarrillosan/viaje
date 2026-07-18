@@ -1,0 +1,124 @@
+/* El día solo se renderiza dentro del bloque oscuro .viaje: se usan directamente
+   los valores del tema oscuro donde el original tenía parches .viaje .xxx. */
+.day {
+  border-top: none;
+  padding-block: clamp(1.6rem, 4vw, 2.6rem);
+  scroll-margin-top: var(--nav-h);
+}
+.head {
+  display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 1.6rem;
+}
+.num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3rem, 9vw, 6rem);
+  line-height: .8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, .18);
+}
+.titles h3 { font-size: clamp(1.8rem, 4vw, 2.9rem); }
+.titles :global(.eyebrow) { margin-bottom: .3rem; display: block; }
+.date {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ibon);
+  margin-bottom: .35rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+.desc p { color: var(--musgo); margin-bottom: 1rem; }
+.desc p:first-of-type { color: var(--pizarra); font-size: 1.08rem; }
+
+.photoWrap { position: static; }
+.photo {
+  position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-lg);
+  aspect-ratio: 16 / 10;
+  isolation: isolate;
+}
+.photo svg { width: 100%; height: 100%; }
+.photoTag { position: absolute; left: 1rem; top: 1rem; z-index: 2; }
+.photoCap {
+  position: absolute; left: 1.1rem; bottom: 1rem; right: 1.1rem; z-index: 2;
+  color: #fff; font-family: var(--font-mono); font-size: .74rem; letter-spacing: .05em;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .5);
+}
+
+.callout {
+  margin-top: 1.4rem;
+  background: linear-gradient(135deg, #12776e 0%, #0c5850 100%);
+  color: #eafaf7;
+  border-radius: var(--r-md);
+  padding: 1.3rem 1.4rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .35);
+}
+.callout::before {
+  content: ""; position: absolute; inset: 0; opacity: .5;
+  background: repeating-radial-gradient(circle at 90% 10%, transparent 0 30px, rgba(255, 255, 255, .06) 30px 31px);
+}
+.callout :global(.eyebrow) { color: #a9ece2; position: relative; }
+.callout p { position: relative; color: #eafaf7; margin-top: .4rem; }
+.callout strong { color: #fff; }
+
+/* Bloque "ventajas/inconvenientes" (proscons, días 2 y 5) */
+.proscons {
+  margin-top: 1.4rem;
+  border: 1px solid var(--roca);
+  border-radius: var(--r-md);
+  background: var(--nieve);
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--sh-sm);
+}
+.prosconsTtl {
+  font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;
+  font-size: 1.05rem; margin-bottom: .9rem;
+}
+.prosconsCols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.pc { display: grid; gap: .35rem; }
+.pc li { display: flex; gap: .5rem; align-items: flex-start; font-size: .88rem; }
+.pc li svg { width: 15px; height: 15px; margin-top: .2rem; flex-shrink: 0; }
+.pro li svg { color: var(--ok); }
+.con li svg { color: var(--warn); }
+@media (max-width: 520px) { .prosconsCols { grid-template-columns: 1fr; } }
+
+/* Bloque "¿cuándo merece la pena?" (decide, día 6) — valores del tema oscuro */
+.decide {
+  margin-top: 1.4rem;
+  border-left: 3px solid var(--alpen);
+  background: var(--alpen-100);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  padding: 1.1rem 1.3rem;
+}
+.decideTtl {
+  font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;
+  font-size: 1.05rem; color: var(--alpen); margin-bottom: .8rem;
+  display: flex; align-items: center; gap: .5rem;
+}
+.decideTtl svg { width: 20px; height: 20px; color: var(--alpen); }
+.decideList { display: grid; gap: .8rem; }
+.decideList li { font-size: .92rem; color: var(--musgo); }
+.decideList b {
+  display: block; color: var(--alpen); font-family: var(--font-mono);
+  font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; margin-bottom: .15rem;
+}
+
+.pending { color: var(--musgo); font-size: 1rem; margin-top: .5rem; }
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: 1fr; }
+  .photoWrap { order: -1; }
+}

@@ -1,0 +1,47 @@
+.wrap { margin-top: clamp(2rem, 5vw, 3rem); overflow-x: auto; -ms-overflow-style: none; scrollbar-width: thin; }
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 1040px;
+  background: var(--nieve);
+  border: 1px solid var(--roca);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--sh-sm);
+  font-size: .9rem;
+}
+.caption { text-align: left; margin-bottom: .6rem; }
+.table thead th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--musgo);
+  padding: .9rem 1rem;
+  background: var(--niebla-2);
+  border-bottom: 1px solid var(--roca);
+}
+.table td, .table th[scope="row"] {
+  padding: .8rem 1rem;
+  border-bottom: 1px solid var(--roca-2);
+  vertical-align: middle;
+}
+.table th[scope="row"] {
+  text-align: left;
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--musgo); font-weight: 500;
+  white-space: nowrap;
+}
+.table tbody tr:last-child td, .table tbody tr:last-child th { border-bottom: none; }
+.table tbody tr.reco { background: var(--ibon-100); }
+.table tbody tr.reco th, .table tbody tr.reco td { color: var(--ibon-600); font-weight: 600; }
+
+/* Colores de cabecera por columna (valores del tema oscuro: la tabla solo vive
+   dentro de .viaje). */
+.table thead th.planA { color: var(--ibon-600); }
+.table thead th.planB { color: #8fb8e0; }
+.table thead th.planC { color: #e6b071; }
+.table thead th.planD { color: #c1a5e0; }
+.table thead th.planE { color: #e79bb0; }
+.table thead th.planF { color: #7fd6a3; }
+.table thead th.planG { color: #d8c58a; }

@@ -1,0 +1,30 @@
+.timeline {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(180px, 1fr);
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 1rem;
+  -ms-overflow-style: none; scrollbar-width: thin;
+}
+.item {
+  position: relative;
+  padding: 2.4rem 1.2rem 0 0;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+.item::before {
+  content: ""; position: absolute; top: 12px; left: 0; right: 0; height: 2px;
+  background: var(--roca);
+}
+.item:first-child::before { left: 11px; }
+.item:last-child::before { right: calc(100% - 12px); }
+.item::after {
+  content: ""; position: absolute; top: 6px; left: 6px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--nieve); border: 3px solid var(--ibon);
+}
+.day { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--ibon); text-transform: uppercase; }
+.place { font-family: var(--font-display); font-weight: 800; font-size: 1.12rem; letter-spacing: -0.02em; margin-top: .1rem; }
+.note { color: var(--musgo); font-size: .9rem; margin-top: .2rem; }
