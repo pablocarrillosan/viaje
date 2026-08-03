@@ -9,7 +9,7 @@ const TABS = [
 ]
 
 export default function ViajeTabs() {
-  const { view, goToView } = useViajeNav()
+  const { view, goToView, tabsRef } = useViajeNav()
   const innerRef = useRef(null)
   const tabRefs = useRef({})
 
@@ -23,7 +23,7 @@ export default function ViajeTabs() {
   }, [view])
 
   return (
-    <div className={styles.tabs}>
+    <div className={styles.tabs} ref={tabsRef}>
       <div className={styles.inner} role="tablist" aria-label="Días del viaje" ref={innerRef}>
         {TABS.map((t) => {
           const active = view === t.view

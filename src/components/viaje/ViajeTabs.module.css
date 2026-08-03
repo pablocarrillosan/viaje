@@ -19,7 +19,9 @@
 }
 .n { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .04em; }
 .l { font-size: .8rem; font-weight: 600; white-space: nowrap; }
-.tab:hover { color: var(--pizarra); background: rgba(255, 255, 255, .06); }
+/* Ojo: el hover NO debe pisar a la pestaña activa (`.tab:hover` tiene más
+   especificidad que `.active`, así que dejaba el texto oscuro sin fondo). */
+.tab:not(.active):hover { color: var(--pizarra); background: rgba(255, 255, 255, .06); }
 .active { color: #04120e; background: var(--ibon); box-shadow: 0 0 0 1px var(--ibon), 0 6px 18px rgba(63, 217, 198, .35); }
 .active .n { color: #04120e; opacity: .72; }
 

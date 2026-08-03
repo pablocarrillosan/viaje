@@ -158,6 +158,11 @@ El botón lleva `data-day="N"`, `data-plan="X"` y `data-name="…"`: son el ganc
   `.tab`, centra la pestaña en la barra y, si `scrollTo`, hace scroll de la **página** hasta el
   bloque (bajo la nav). Se dispara desde los `.tab` y desde cualquier `[data-goto]` (enlaces de la
   nav "Días"/"Tu viaje", `.tl-item` de la timeline, botones del hero).
+- ⚠ **El scroll se ancla a la barra de pestañas, no a la cabecera del bloque.** `goToView` mide el
+  contenedor de **paneles** (`panelsRef`) y le resta la nav más la altura de la barra
+  (`tabsRef.offsetHeight`): al elegir un día quedan arriba las pestañas y debajo el contenido, sin
+  pasar por el título "El viaje, día a día". **No midas la barra con `getBoundingClientRect`**: es
+  `position: sticky`, así que una vez pegada devuelve su posición actual y el scroll saldría nulo.
 - El tema oscuro está **scopeado a `.viaje`** en `styles.css` (sección 21): redefine los tokens
   (`--niebla`, `--nieve`, `--pizarra`…) dentro del bloque, más arreglos puntuales de colores
   hardcodeados (rayado del `datasheet`, `plan__rate`, cabeceras `plan-b…g` de la comparativa,

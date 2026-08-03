@@ -31,16 +31,29 @@
 }
 .brandDot { width: 9px; height: 9px; border-radius: 50%; background: var(--ibon); box-shadow: 0 0 0 4px var(--ibon-100); }
 .links { display: flex; gap: .3rem; align-items: center; }
-.links a {
+/* `:not(.cta)` es imprescindible: el botón "Ver itinerario" es un `.btn--primary`
+   y `.links a` (0,1,1) le ganaba en especificidad, dejando texto oscuro sobre el
+   turquesa (ilegible) y borrándole el fondo al pasar el ratón. */
+.links a:not(.cta) {
   padding: .5rem .8rem;
   border-radius: var(--r-pill);
   font-size: .9rem;
   font-weight: 500;
   color: var(--musgo);
+  white-space: nowrap;
   transition: color .2s ease, background .2s ease;
 }
-.links a:hover { color: var(--pizarra); background: rgba(23, 32, 28, .05); }
-.cta { display: none; }
+.links a:not(.cta):hover { color: var(--pizarra); background: rgba(23, 32, 28, .05); }
+/* `flex-shrink: 0` + `nowrap`: sin ellos el flex del nav lo comprime y el rótulo
+   parte en dos líneas. */
+.cta {
+  display: none;
+  padding: .5rem 1.1rem;
+  font-size: .9rem;
+  margin-left: .35rem;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
 
 @media (max-width: 720px) {
   .links { gap: 0; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }

@@ -10,7 +10,7 @@ import styles from './Viaje.module.css'
    redefiniendo los tokens en .viaje (Viaje.module.css): al heredarse por
    cascada, todos los hijos (Day, PlanCard, CompareTable…) pasan a oscuro. */
 export default function Viaje() {
-  const { view, sectionRef } = useViajeNav()
+  const { view, sectionRef, panelsRef } = useViajeNav()
   const activeDay = dias.find((d) => d.id === view)
 
   return (
@@ -26,7 +26,7 @@ export default function Viaje() {
 
       <ViajeTabs />
 
-      <div className={styles.panels}>
+      <div className={styles.panels} ref={panelsRef}>
         <div className={styles.panel} key={view}>
           {view === 'tu-viaje' ? <TripSummary /> : activeDay ? <Day day={activeDay} /> : null}
         </div>
