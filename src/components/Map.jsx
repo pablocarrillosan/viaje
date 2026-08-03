@@ -9,7 +9,7 @@ export default function Map() {
       <div className="wrap">
         <div className="section-head reveal">
           <span className="eyebrow">El recorrido</span>
-          <h2 className="section-title">Un bucle de 850 km por el Pirineo</h2>
+          <h2 className="section-title">Un bucle de 920 km por el Pirineo</h2>
           <p className="section-lead">
             De Teruel al Valle de Tena, cruzando Ordesa y los valles occidentales hasta Ansó, y vuelta a casa.
             Estos son los tiempos de coche aproximados entre etapas.

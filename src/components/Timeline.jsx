@@ -5,18 +5,18 @@ import styles from './Timeline.module.css'
 /* Notas cortas de cada día para la línea temporal (texto del itinerario). */
 const NOTES = {
   1: 'Salida de Teruel y llegada a Sallent',
-  2: 'Ibones de Anayet',
-  3: 'Pico Anayet',
+  2: 'Subida a Respomuso y noche a 2.220 m',
+  3: 'Gran Facha (3.005 m) y bajada',
   4: 'Descanso: Lanuza y Panticosa',
   5: 'Cola de Caballo y Circo de Soaso',
   6: 'Monte Perdido (el día grande)',
   7: 'Descanso: Aínsa y Bujaruelo',
-  8: 'Selva de Oza y Aguas Tuertas',
+  8: 'Aguas Tuertas y traslado a Linza',
   9: 'Linza y la Mesa de los Tres Reyes',
   10: 'Vuelta a Teruel con paradas',
 }
 const PLACES = {
-  1: 'Valle de Tena', 2: 'Anayet', 3: 'Anayet', 4: 'Valle de Tena', 5: 'Ordesa',
+  1: 'Valle de Tena', 2: 'Respomuso', 3: 'Gran Facha', 4: 'Valle de Tena', 5: 'Ordesa',
   6: 'Monte Perdido', 7: 'Sobrarbe', 8: 'Valle de Hecho', 9: 'Valle de Ansó', 10: 'Regreso',
 }
 

@@ -12,6 +12,7 @@ export default {
   desc: [
     'Karst espectacular y ambiente salvaje. La Mesa de los Tres Reyes (2.428 m) es el techo de este sector occidental, con vistas al Anie y, con suerte, un mar de nubes memorable. Día para una última gran cima… o para un cierre tranquilo.',
     'Es el día de la <strong>comparativa completa</strong>: gran cima exigente (Mesa), cima potente algo más corta (Petrechema) o el idílico ibón de Acherito. Elige según cómo lleguen las piernas al final del viaje.',
+    'Se duerme en Linza <strong>la noche anterior y la de hoy</strong>: la Mesa son 8-9 h y arranca del propio refugio, así que puedes salir de noche sin conducir antes.',
   ],
   callout: {
     eyebrow: 'Mi recomendación',
@@ -20,7 +21,8 @@ export default {
   tips: [
     'Última gran cima: dosifica',
     'Cuidado con la niebla en el karst (orientación)',
-    'Reserva fuerzas para el largo regreso del día 8',
+    'Sales de la propia base: aprovecha y madruga de verdad',
+    'Reserva fuerzas para el largo regreso de mañana (5 h 10)',
   ],
   gear: [
     'Botas de montaña',
@@ -32,9 +34,9 @@ export default {
   ],
   photo: { art: 'day-09', tag: 'Día 09', caption: 'Mesa de los Tres Reyes · 2.428 m' },
   datasheet: [
-    { icon: 'car', label: 'Coche · llegada', value: '≈ 1 h de Oza a Linza · vía Hecho, Ansó y Zuriza' },
+    { icon: 'car', label: 'Coche · llegada', value: '0 min · dormiste anoche en Linza' },
     { icon: 'car', label: 'Coche · salida', value: '0 min · última noche en Linza / Zuriza' },
-    { icon: 'bed', label: 'Dónde dormir', value: 'Refugio o camping de Linza (Zuriza)' },
+    { icon: 'bed', label: 'Dónde dormir', value: 'Refugio o camping de Linza (Zuriza) · 2ª noche' },
     { icon: 'flame', label: 'Esfuerzo', rating: 4 },
     { icon: 'landscape', label: 'Paisaje', rating: 5 },
     { icon: 'waves', label: 'Baño / ibón', value: 'Ibón de Acherito (agua fría)' },

@@ -15,7 +15,7 @@ export default function Hero() {
           <span className={styles.year}>2026</span>
         </h1>
         <p className={`${styles.sub} reveal-load d3`}>
-          Diez días por Anayet, Ordesa, Monte Perdido y los valles occidentales, con dos jornadas de descanso
+          Diez días por Respomuso, Ordesa, Monte Perdido y los valles occidentales, con dos jornadas de descanso
           escénico. Cada día, varios planes para elegir según el tiempo, las fuerzas y la meteo.
         </p>
         <div className={`${styles.actions} reveal-load d4`}>
@@ -27,7 +27,7 @@ export default function Hero() {
         <div className={`${styles.meta} reveal-load d5`}>
           <div><b>10</b>días de viaje</div>
           <div><b>6</b>cimas e ibones</div>
-          <div><b>≈ 850 km</b>de rutas y coche</div>
+          <div><b>≈ 920 km</b>de rutas y coche</div>
           <div><b>1</b>gran objetivo · Monte Perdido</div>
         </div>
       </div>

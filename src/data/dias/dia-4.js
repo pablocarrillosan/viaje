@@ -10,8 +10,8 @@ export default {
   summaryTitle: 'Descanso · Valle de Tena',
   rest: true,
   desc: [
-    'Día de piernas en alto. Tras dos jornadas fuertes en Anayet toca bajar el ritmo: pueblos de piedra, un paseo llano junto al agua y un atardecer sobre el embalse de Lanuza.',
-    'Por la tarde-noche se hace el traslado a Torla para entrar en la órbita de Ordesa. Es la primera de las dos noches en el valle.',
+    'Día de piernas en alto. Tras la noche a 2.220 m y el tresmil del día 3 toca bajar el ritmo: pueblos de piedra, un paseo llano junto al agua y un atardecer sobre el embalse de Lanuza.',
+    'Por la tarde-noche se hace el traslado a Torla (1 h, 45 km por Cotefablo) para entrar en la órbita de Ordesa. Es la primera de las <strong>cuatro noches</strong> en el valle: no vuelves a cambiar de alojamiento hasta el día 8.',
   ],
   callout: {
     eyebrow: 'Mi recomendación',
@@ -32,7 +32,7 @@ export default {
   photo: { art: 'day-04', tag: 'Día 04', caption: 'Embalse de Lanuza al atardecer · Valle de Tena' },
   datasheet: [
     { icon: 'car', label: 'Coche · llegada', value: 'Mañana libre en el Valle de Tena' },
-    { icon: 'car', label: 'Coche · salida', value: '≈ 1 h 15 a Torla al final del día · 60 km' },
+    { icon: 'car', label: 'Coche · salida', value: '≈ 1 h a Torla al final del día · 45 km' },
     { icon: 'bed', label: 'Dónde dormir', value: 'Torla / Ordesa (1ª noche)' },
     { icon: 'flame', label: 'Esfuerzo', rating: 1 },
     { icon: 'landscape', label: 'Paisaje', rating: 4 },

@@ -14,7 +14,7 @@ export default function Footer() {
           <FooterPeaks />
         </div>
         <div className={styles.meta}>
-          PIRINEOS 2026 · Teruel → Anayet → Ordesa → Oza → Linza → Teruel · Emergencias 112
+          PIRINEOS 2026 · Teruel → Respomuso → Ordesa → Oza → Linza → Teruel · Emergencias 112
         </div>
       </div>
     </footer>

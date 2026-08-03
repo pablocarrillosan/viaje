@@ -11,7 +11,7 @@ export default {
   rest: true,
   desc: [
     'Recuperación tras Monte Perdido. Un día sin cuestas: la villa medieval de Aínsa, un paseo llano al puente de Bujaruelo y, si el cuerpo pide agua, las pozas del río Ara.',
-    'Se pueden encadenar varios sitios en la misma jornada. Al final del día, traslado hacia la Selva de Oza (Valle de Hecho) para el bloque occidental.',
+    'Se duerme la <strong>cuarta y última noche en Torla</strong>, así que el atardecer en las murallas de Aínsa se disfruta sin reloj: son 55 min de vuelta. El traslado al bloque occidental se hace mañana con luz.',
   ],
   callout: {
     eyebrow: 'Mi recomendación',
@@ -21,7 +21,7 @@ export default {
     'Aínsa, mejor al atardecer',
     'Bujaruelo: pista de tierra hasta el puente',
     'Encadena Bujaruelo (mañana) y Aínsa (tarde)',
-    'Deja tiempo para el traslado a Oza',
+    'Hoy no hay traslado: vuelves a dormir a Torla',
   ],
   gear: [
     'Calzado cómodo',
@@ -35,9 +35,9 @@ export default {
     caption: 'Plaza Mayor de Aínsa y la Peña Montañesa · Sobrarbe',
   },
   datasheet: [
-    { icon: 'car', label: 'Coche · llegada', value: 'Mañana desde Torla' },
-    { icon: 'car', label: 'Coche · salida', value: '≈ 2 h a Selva de Oza vía Jaca al final' },
-    { icon: 'bed', label: 'Dónde dormir', value: 'Selva de Oza / Hecho' },
+    { icon: 'car', label: 'Coche · llegada', value: '≈ 55 min de Torla a Aínsa · 45 km por el valle del Ara' },
+    { icon: 'car', label: 'Coche · salida', value: '≈ 55 min de vuelta a Torla tras el atardecer' },
+    { icon: 'bed', label: 'Dónde dormir', value: 'Torla / Ordesa (4ª y última noche)' },
     { icon: 'flame', label: 'Esfuerzo', rating: 1 },
     { icon: 'landscape', label: 'Paisaje', rating: 5 },
     { icon: 'waves', label: 'Baño / río', value: 'Pozas del río Ara' },
@@ -142,7 +142,7 @@ export default {
   nearby: {
     eyebrow: 'Cerca de aquí',
     title: 'Pueblos y paradas cerca',
-    sub: 'Villas y valles del Sobrarbe camino del oeste.',
+    sub: 'Villas y valles del Sobrarbe, con base en Torla.',
     towns: [
       {
         name: 'Aínsa',

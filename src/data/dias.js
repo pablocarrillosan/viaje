@@ -33,7 +33,7 @@ const dia1 = {
     rest: false,
     desc: [
       'Día de transición: casi cuatro horas de coche subiendo desde Teruel hasta el corazón del Valle de Tena. La idea es llegar sin prisa, montar el campamento con luz y guardar fuerzas para lo que viene.',
-      'Sallent es un buen campo base para los primeros días: pueblo con servicios, gasolinera cerca y acceso rápido a Formigal y Anayet. Nada de madrugones hoy; el viaje ya es suficiente.',
+      'Sallent es un buen campo base para los primeros días: pueblo con servicios, gasolinera cerca y, a diez minutos, el parking de La Sarra de donde arranca mañana la subida a Respomuso. Nada de madrugones hoy; el viaje ya es suficiente.',
     ],
     callout: {
       eyebrow: 'Mi recomendación',
@@ -42,7 +42,7 @@ const dia1 = {
     tips: [
       'Reposta antes de subir al valle',
       'Compra víveres en Sabiñánigo o Biescas',
-      'Cena pronto para madrugar el día 2',
+      'Confirma la reserva del refugio de Respomuso para mañana',
     ],
     gear: [
       'Documentación y reserva del camping',
@@ -52,7 +52,7 @@ const dia1 = {
     ],
     photo: { art: 'day-01', tag: 'Día 01', caption: 'Embalse de Lanuza · atardecer' },
     datasheet: [
-      { icon: 'car', label: 'Coche · llegada', value: '≈ 3 h 45 min desde Teruel · 290 km' },
+      { icon: 'car', label: 'Coche · llegada', value: '≈ 4 h desde Teruel · 330 km' },
       { icon: 'car', label: 'Coche · salida', value: '0 min · duermes en Sallent de Gállego' },
       { icon: 'bed', label: 'Dónde dormir', value: 'Camping en Sallent de Gállego' },
       { icon: 'flame', label: 'Esfuerzo', rating: 1 },
@@ -72,6 +72,10 @@ const dia1 = {
         plan: 'A',
         type: 'Descanso · aclimatación',
         name: 'Llegar y descansar',
+        /* No hay recorrido que dibujar: te quedas en el camping. Sin esto, el
+           mapa lo contaría entre los planes «sin trazado todavía», dando a
+           entender que falta un track cuando no hay ninguno que hacer. */
+        sinRuta: true,
         desc: 'Montar el campamento con luz, ducha, cena tranquila y a la cama. Cero exigencia.',
         rate: '3.4',
         art: 'd1a',

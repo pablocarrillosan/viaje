@@ -32,7 +32,7 @@ export default {
   photo: { art: 'day-10', tag: 'Día 10', caption: 'Monasterio de San Juan de la Peña' },
   datasheet: [
     { icon: 'car', label: 'Coche · llegada', value: '0 min · sales de Linza' },
-    { icon: 'car', label: 'Coche · salida', value: '≈ 4 h 30 a Teruel · con paradas, jornada completa' },
+    { icon: 'car', label: 'Coche · salida', value: '≈ 5 h 10 a Teruel · 374 km, con paradas, jornada completa' },
     { icon: 'bed', label: 'Dónde dormir', value: 'En casa 🙂 / Teruel' },
     { icon: 'flame', label: 'Esfuerzo', rating: 1 },
     { icon: 'landscape', label: 'Paisaje', rating: 3 },
