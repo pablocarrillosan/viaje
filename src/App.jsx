@@ -5,6 +5,7 @@ import Hero from './components/layout/Hero.jsx'
 import Map from './components/Map.jsx'
 import Timeline from './components/Timeline.jsx'
 import Viaje from './components/viaje/Viaje.jsx'
+import MapaViaje from './components/mapaviaje/MapaViaje.jsx'
 import Top from './components/Top.jsx'
 import Material from './components/Material.jsx'
 import Footer from './components/layout/Footer.jsx'
@@ -19,6 +20,7 @@ export default function App() {
           <Map />
           <Timeline />
           <Viaje />
+          <MapaViaje />
           <Top />
           <Material />
         </main>

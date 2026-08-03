@@ -7,14 +7,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:geo": "node scripts/check-geo.mjs",
+    "build:tramos": "node scripts/build-tramos.mjs",
+    "import:gpx": "node scripts/import-gpx.mjs"
   },
   "dependencies": {
+    "leaflet": "^1.9.4",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^30.0.1",
     "vite": "^5.4.11",
     "vite-plugin-svgr": "^4.3.0"
   }
