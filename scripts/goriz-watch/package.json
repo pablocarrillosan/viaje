@@ -1,0 +1,15 @@
+{
+  "name": "goriz-watch",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Vigila plazas en los refugios del viaje Pirineos 2026 vía la API de alberguesyrefugios",
+  "scripts": {
+    "check": "node check-refugios.mjs",
+    "watch": "node check-refugios.mjs --watch",
+    "tabla": "node check-refugios.mjs --tabla"
+  },
+  "optionalDependencies": {
+    "nodemailer": "^6.9.14"
+  }
+}

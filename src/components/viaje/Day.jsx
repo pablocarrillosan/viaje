@@ -5,6 +5,7 @@ import Datasheet from './Datasheet.jsx'
 import PlanCarousel from './PlanCarousel.jsx'
 import CompareTable from './CompareTable.jsx'
 import Nearby from './Nearby.jsx'
+import PlazasChip from './PlazasChip.jsx'
 import styles from './Day.module.css'
 
 export default function Day({ day }) {
@@ -17,6 +18,7 @@ export default function Day({ day }) {
             <span className={styles.date}>{day.date}</span>
             <span className="eyebrow">{day.zone}</span>
             <h3>{day.title}</h3>
+            <PlazasChip num={day.num} />
           </div>
         </div>
 

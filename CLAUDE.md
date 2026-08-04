@@ -268,7 +268,82 @@ no para navegar. La línea dibujada suele quedarse **corta** respecto a la dista
   botones de selección, como en el resto del documento.
 - **Datos:** verificar altitudes, desniveles, tiempos y distancias de coche antes de publicarlos.
 
+## Sección «Plazas en refugios» (`#plazas`)
+
+Disponibilidad real de las tres noches en refugio, del 21 al 30 de agosto. Va después de
+`#mapa-viaje`, en tema **claro**, con ancla propia en la nav.
+
+- **Fuente: la API pública que alimenta el calendario oficial** de alberguesyrefugios.com
+  (descubierta capturando el tráfico del propio widget de reservas):
+  - `GET /refugios/getAll?lang=es` → catálogo, para resolver `friendlyurl` → `id`
+  - `GET /refugios/get/<id>/getPlazas2/` → disponibilidad por tipo de plaza y día
+  - **`plazas` = `plazasDisponibles − plazasUsadas` = huecos libres.** Es el único campo
+    fiable. ⚠ **`estado` NO indica disponibilidad** y se ignora a propósito: el día en
+    curso sale con `estado: 3` teniendo plazas libres, porque no se puede reservar el
+    mismo día.
+- ⚠ **«0 plazas» = completo ONLINE, no refugio lleno.** El motor de internet maneja un cupo
+  limitado de cada establecimiento (por eso `plazasDisponibles` baila entre 47 y 90 en un
+  refugio de 80 camas). El propio calendario tiene una categoría «Sin plazas online, llama
+  por teléfono». Este matiz está escrito en la web, en el email de aviso y en los scripts:
+  **no lo quites.**
+- **Dos fuentes, en cascada:** la instantánea `src/data/plazas.json` (viaja en el bundle,
+  siempre está) y un intento de refresco **en vivo** contra la API cuando la sección entra
+  en pantalla. La API está en otro dominio, así que puede fallar por CORS: si pasa, se
+  mantiene la instantánea y se dice en pantalla. Nunca queda vacía.
+- **Refrescar la instantánea:** `npm run fetch:plazas` (escribe `src/data/plazas.json`;
+  commitéalo para que la web publicada lo lleve).
+- **`src/data/noches.js`** es el puente itinerario → disponibilidad: qué día duerme en qué
+  refugio y en qué fecha. ⚠ Los días llevan `num` como **cadena con cero delante** (`'05'`),
+  así que el chip normaliza con `Number(num)`.
+- **Chip por día:** `viaje/PlazasChip.jsx` pinta un indicador en la cabecera de los días
+  2, 5, 8 y 9. Vive dentro del bloque oscuro, así que su CSS no usa los tokens claros.
+- **Vigilancia fuera de la web:** `scripts/goriz-watch/check-refugios.mjs` consulta la misma
+  API cada 20 min y avisa por email. Nunca avanza el asistente de reserva: el sistema
+  bloquea las plazas solicitadas hasta el pago del anticipo.
+
+### Automatización (sin tocar nada a mano)
+
+| Qué | Dónde | Cadencia |
+|---|---|---|
+| Refrescar el dato de la web publicada | `deploy.yml` → paso `npm run fetch:plazas` | cada 6 h + en cada push |
+| Avisar de que hay plazas | `plazas-alerta.yml` → `scripts/alerta-plazas.mjs` | cada hora |
+
+- **El refresco NO commitea nada.** `fetch:plazas` corre dentro del build de Pages, así que
+  la web publicada lleva el dato fresco y `src/data/plazas.json` en git queda solo como
+  *fallback*. El paso va con `continue-on-error: true`: si la API falla, se despliega con la
+  instantánea y el build **no** se rompe.
+- **El aviso no usa credenciales de correo.** Abre una *issue* con la etiqueta `plazas` y es
+  GitHub quien manda el email. Si ya hay una abierta con el mismo título no duplica; si los
+  números cambian, cierra la anterior y abre una nueva.
+- **`scripts/alerta-plazas.mjs` importa `src/data/noches.js`**, así que itinerario y alerta
+  no se pueden desincronizar: cambiar una noche allí basta para que la alerta la siga.
+- ⚠ **GitHub desactiva los workflows programados** en repos sin actividad durante 60 días.
+  Si el aviso deja de llegar, míralo ahí antes que en el código.
+
 ## Changelog
+
+### 2026-08-04 — Disponibilidad real de refugios en la web (`#plazas`) + vigía por email
+- **Encontrada la API que alimenta el calendario oficial.** El widget de reservas de
+  alberguesyrefugios.com es una app Vue cuyo calendario (hotel-datepicker) codifica el estado
+  de cada día en **color**, no en clases CSS. Tras varios intentos fallidos de leerlo por
+  scraping, se capturó el tráfico del propio widget y apareció
+  `api.alberguesyrefugios.com/refugios/get/<id>/getPlazas2/`, que da los números exactos.
+  **`plazas` = `plazasDisponibles − plazasUsadas`**; el campo `estado` es engañoso y se ignora.
+- **Nueva sección `#plazas`** (clara, tras `#mapa-viaje`): una tarjeta por refugio con la tira
+  del 21 al 30 de agosto, número de huecos por día, las noches del viaje resaltadas y leyenda
+  de cuatro estados. Instantánea en `src/data/plazas.json` + refresco en vivo con *fallback*
+  si CORS lo bloquea.
+- **Chip por día** en las jornadas 2 (Respomuso), 5 (Góriz), 8 y 9 (Linza), enlazado a la
+  sección. Nuevo `src/data/noches.js` como puente día → refugio + fecha.
+- **`npm run fetch:plazas`** (`scripts/fetch-plazas.mjs`) regenera la instantánea.
+- **`scripts/goriz-watch/`**: vigía que consulta la misma API cada 20 min y avisa por email
+  (Mail.app o SMTP con contraseña de aplicación en variable de entorno) + notificación de
+  macOS. No repite avisos ya enviados y **nunca** avanza el asistente de reserva, porque el
+  sistema bloquea las plazas solicitadas hasta que se paga el anticipo.
+- **Dato del día en que se escribió esto:** Góriz tenía **4 plazas para la noche del 25**
+  (81 ocupadas de 85), justo las del grupo. El 21, 23 y 29 estaban a cero.
+- **Verificado:** `npm run build` (265 módulos) y render SSR headless — sección presente con
+  las 3 tarjetas, chip correcto en los días 2/5/8/9 y ausente en el resto, sin errores.
 
 ### 2026-08-03 — Anayet cierra al vivac: el arranque se muda a Respomuso (días 2 y 3)
 - **Causa:** la **ORDEN MAT/221/2026** (BOA nº 32, 17-feb-2026) prohíbe el **baño todo el año** y la

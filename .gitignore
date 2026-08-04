@@ -3,3 +3,17 @@ dist/
 *.local
 .DS_Store
 vite.config.js.timestamp-*
+
+# Vigía de plazas en refugios (scripts/goriz-watch): salidas locales, no código
+goriz-disponibilidad.log
+refugios-disponibilidad.log
+GORIZ-DISPONIBLE.txt
+REFUGIOS-DISPONIBLE.txt
+scripts/goriz-watch/dumps/
+scripts/goriz-watch/refugios-ids.json
+scripts/goriz-watch/.avisos-enviados.json
+scripts/goriz-watch/ultimo-estado-*.txt
+scripts/goriz-watch/launchd.*.log
+
+# Restos de pruebas de render SSR
+.tmp-ssr/

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.pablo.goriz-watch</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/node</string>
+        <string>/Users/pablocarrillo/Proyectos/viaje/scripts/goriz-watch/check-goriz.mjs</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/pablocarrillo/Proyectos/viaje/scripts/goriz-watch</string>
+
+    <!-- Cada 3600 s = 1 hora -->
+    <key>StartInterval</key>
+    <integer>3600</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/pablocarrillo/Proyectos/viaje/scripts/goriz-watch/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/pablocarrillo/Proyectos/viaje/scripts/goriz-watch/launchd.err.log</string>
+</dict>
+</plist>

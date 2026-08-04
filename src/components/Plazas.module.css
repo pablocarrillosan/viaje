@@ -1,0 +1,208 @@
+/* Sección «Plazas en refugios» — disponibilidad del 21 al 30 de agosto.
+   Tema claro, coherente con el resto de secciones fuera de .viaje. */
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  margin-bottom: 1.4rem;
+}
+
+.sello {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .04em;
+  color: var(--musgo);
+}
+.sello svg { width: 15px; height: 15px; }
+
+.leyenda {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .45rem;
+  font-size: .75rem;
+  color: var(--musgo);
+}
+.punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-left: .6rem;
+}
+.leyenda .punto:first-child { margin-left: 0; }
+
+/* ── Estados ─────────────────────────────────────────────────────────────── */
+.libre   { --plaza-bg: #E4F3EC; --plaza-ink: #1d6b52; --plaza-borde: #9dd3bd; }
+.pocas   { --plaza-bg: var(--alpen-100); --plaza-ink: var(--amber-ink); --plaza-borde: var(--alpen-200); }
+.cero    { --plaza-bg: #F6E7E7; --plaza-ink: #98423f; --plaza-borde: #e2b9b7; }
+.sindato { --plaza-bg: var(--roca-2); --plaza-ink: var(--musgo-2); --plaza-borde: var(--roca); }
+
+.punto.libre   { background: #2E8B6E; }
+.punto.pocas   { background: var(--alpen); }
+.punto.cero    { background: #b8524e; }
+.punto.sindato { background: var(--roca); }
+
+/* ── Tarjetas ────────────────────────────────────────────────────────────── */
+.refugios {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.tarjeta {
+  background: var(--nieve);
+  border: 1px solid var(--roca);
+  border-radius: var(--r-md);
+  padding: 1.3rem 1.4rem 1.1rem;
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .6rem;
+  margin-bottom: .9rem;
+}
+.cabecera h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--pizarra);
+}
+.contacto {
+  display: inline-flex;
+  align-items: center;
+  gap: .9rem;
+}
+.tel {
+  font-family: var(--font-mono);
+  font-size: .76rem;
+  color: var(--musgo);
+}
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ibon);
+  text-decoration: none;
+}
+.enlace:hover { text-decoration: underline; }
+
+.bloque + .bloque { margin-top: 1rem; }
+.tipo {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--musgo-2);
+  margin-bottom: .5rem;
+}
+
+/* ── Tira de días ────────────────────────────────────────────────────────── */
+.tira {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: .35rem;
+}
+
+.celda {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .1rem;
+  padding: .45rem .2rem .5rem;
+  border-radius: var(--r-sm);
+  background: var(--plaza-bg);
+  border: 1px solid var(--plaza-borde);
+  color: var(--plaza-ink);
+  text-align: center;
+}
+
+.celdaDia {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  opacity: .75;
+}
+.celdaNum {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .95rem;
+  line-height: 1;
+}
+.celdaPlazas {
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: .15rem;
+}
+
+/* Noche en la que dormimos ahí */
+.nuestra {
+  box-shadow: 0 0 0 2px var(--ibon);
+}
+.marca {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ibon);
+}
+
+/* ── Resumen y avisos ────────────────────────────────────────────────────── */
+.resumen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.1rem;
+  margin: .9rem 0 0;
+  font-size: .84rem;
+  color: var(--musgo);
+}
+.resumen span { color: var(--plaza-ink); }
+.resumen b { color: inherit; }
+
+.vacio {
+  margin: 0;
+  font-size: .88rem;
+  color: var(--musgo);
+}
+.vacio code {
+  font-family: var(--font-mono);
+  font-size: .82em;
+  background: var(--niebla-2);
+  padding: .1rem .35rem;
+  border-radius: 6px;
+}
+
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: .55rem;
+  margin: 1.3rem 0 0;
+  padding: .9rem 1.1rem;
+  background: var(--alpen-100);
+  border-left: 3px solid var(--alpen);
+  border-radius: var(--r-sm);
+  font-size: .88rem;
+  color: var(--decide-ink);
+}
+.aviso svg { width: 18px; height: 18px; flex: none; margin-top: .1rem; }
+
+/* ── Móvil: la tira pasa a dos filas de cinco ────────────────────────────── */
+@media (max-width: 720px) {
+  .tira { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .meta { flex-direction: column; align-items: flex-start; }
+}

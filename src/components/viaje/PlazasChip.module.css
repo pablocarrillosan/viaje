@@ -1,0 +1,46 @@
+/* Chip de disponibilidad dentro del bloque .viaje (tema OSCURO).
+   No usa los tokens claros: aquí el fondo es verde pino, así que los estados
+   se resuelven con transparencias sobre él. */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .3rem .7rem .3rem .55rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--chip-borde, rgba(191, 225, 220, .3));
+  background: var(--chip-bg, rgba(255, 255, 255, .06));
+  color: var(--chip-ink, #cfe8e1);
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .25s ease, border-color .25s ease;
+}
+.chip:hover { background: rgba(255, 255, 255, .12); }
+.chip svg { width: 14px; height: 14px; flex: none; }
+
+.texto { line-height: 1; }
+
+.libre {
+  --chip-bg: rgba(46, 139, 110, .22);
+  --chip-borde: rgba(127, 216, 204, .55);
+  --chip-ink: #8ee0c4;
+}
+.pocas {
+  --chip-bg: rgba(217, 138, 43, .2);
+  --chip-borde: rgba(241, 214, 172, .5);
+  --chip-ink: #f0c98d;
+}
+.cero {
+  --chip-bg: rgba(198, 82, 78, .2);
+  --chip-borde: rgba(226, 185, 183, .45);
+  --chip-ink: #eaa9a5;
+}
+.sindato {
+  --chip-bg: rgba(255, 255, 255, .05);
+  --chip-borde: rgba(191, 225, 220, .22);
+  --chip-ink: #9dc7be;
+}

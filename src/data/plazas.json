@@ -1,0 +1,38 @@
+{
+  "generado": "2026-08-04T21:29:48.417Z",
+  "ventana": {
+    "desde": "2026-08-21",
+    "hasta": "2026-08-30"
+  },
+  "fuente": "https://api.alberguesyrefugios.com/refugios/get/<id>/getPlazas2/",
+  "nota": "Instantánea inicial: solo Góriz, capturada del tráfico real del widget. Lanza `npm run fetch:plazas` para rellenar Respomuso y Linza.",
+  "refugios": {
+    "respomuso": null,
+    "goriz": {
+      "id": "5",
+      "nombre": "Refugio de Góriz",
+      "telefono": "974 341 201",
+      "web": "https://www.alberguesyrefugios.com/goriz/reservar",
+      "alojamientos": [
+        {
+          "id": "6",
+          "nombre": "Refugio (dormitorio compartido)",
+          "maxPlazas": 25,
+          "dias": {
+            "2026-08-21": 0,
+            "2026-08-22": 1,
+            "2026-08-23": 0,
+            "2026-08-24": 2,
+            "2026-08-25": 4,
+            "2026-08-26": 9,
+            "2026-08-27": 8,
+            "2026-08-28": 3,
+            "2026-08-29": 0,
+            "2026-08-30": 2
+          }
+        }
+      ]
+    },
+    "linza": null
+  }
+}

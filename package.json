@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "check:geo": "node scripts/check-geo.mjs",
     "build:tramos": "node scripts/build-tramos.mjs",
-    "import:gpx": "node scripts/import-gpx.mjs"
+    "import:gpx": "node scripts/import-gpx.mjs",
+    "fetch:plazas": "node scripts/fetch-plazas.mjs"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
