@@ -305,20 +305,19 @@ Disponibilidad real de las tres noches en refugio, del 21 al 30 de agosto. Va de
 
 | Qué | Dónde | Cadencia |
 |---|---|---|
-| Refrescar el dato de la web publicada | `deploy.yml` → paso `npm run fetch:plazas` | cada 6 h + en cada push |
-| Avisar de que hay plazas | `plazas-alerta.yml` → `scripts/alerta-plazas.mjs` | cada hora |
+| Refrescar el dato de la web publicada | `deploy.yml` → paso `npm run fetch:plazas` | cada hora (min 35) + en cada push |
 
 - **El refresco NO commitea nada.** `fetch:plazas` corre dentro del build de Pages, así que
   la web publicada lleva el dato fresco y `src/data/plazas.json` en git queda solo como
   *fallback*. El paso va con `continue-on-error: true`: si la API falla, se despliega con la
   instantánea y el build **no** se rompe.
-- **El aviso no usa credenciales de correo.** Abre una *issue* con la etiqueta `plazas` y es
-  GitHub quien manda el email. Si ya hay una abierta con el mismo título no duplica; si los
-  números cambian, cierra la anterior y abre una nueva.
-- **`scripts/alerta-plazas.mjs` importa `src/data/noches.js`**, así que itinerario y alerta
-  no se pueden desincronizar: cambiar una noche allí basta para que la alerta la siga.
+- **No hay avisos automáticos por correo.** Se descartó a propósito: la disponibilidad se
+  consulta en la sección `#plazas`, que ya viene fresca. Si algún día se quieren avisos, el
+  patrón que funcionaba era un workflow que abre una *issue* con la etiqueta `plazas` (GitHub
+  manda el email por su cuenta, sin necesidad de credenciales SMTP). Para vigilancia puntual
+  en local está `scripts/goriz-watch/`.
 - ⚠ **GitHub desactiva los workflows programados** en repos sin actividad durante 60 días.
-  Si el aviso deja de llegar, míralo ahí antes que en el código.
+  Si la web deja de actualizarse sola, míralo ahí antes que en el código.
 
 ## Changelog
 

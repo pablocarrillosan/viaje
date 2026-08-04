@@ -3,11 +3,12 @@ name: Deploy a GitHub Pages
 on:
   push:
     branches: [master]
-  # Refresco automático de la disponibilidad de refugios: cada 6 horas se
-  # reconstruye el sitio pidiendo las plazas a la API. No hace falta commitear
-  # nada ni tener el ordenador encendido.
+  # Refresco automático de la disponibilidad de refugios: cada hora se reconstruye
+  # el sitio pidiendo las plazas a la API. No hace falta commitear nada ni tener
+  # el ordenador encendido.
+  # Va en el minuto 35 para no solaparse con plazas-alerta.yml (minuto 7).
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '35 * * * *'
   workflow_dispatch:
 
 permissions:
