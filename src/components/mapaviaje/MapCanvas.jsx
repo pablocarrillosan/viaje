@@ -1,29 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
-import { MapContainer, TileLayer, useMap, useMapEvents } from 'react-leaflet'
+import { MapContainer, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { PIRINEO_BOUNDS } from '../../data/geo/bases.js'
 import { boundsOf } from './deriveLayers.js'
 import { useMapBounds } from '../../hooks/useMapBounds.js'
+import { BaseTiles, TileSwitch, ZoomWatcher, useTiles } from './tiles.jsx'
 import MapLayers from './MapLayers.jsx'
 import styles from './MapaViaje.module.css'
 
 /* Se carga con React.lazy desde <MapaViaje>: Leaflet (≈150 kB) no entra en el
    bundle inicial ni se descarga hasta que la sección se acerca al viewport. */
-
-const TILES = {
-  topo: {
-    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-    attribution:
-      'Mapa © <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA) · Datos © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 17,
-  },
-  osm: {
-    url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 19,
-  },
-}
 
 /* El scroll de la página manda: la rueda solo hace zoom tras hacer clic en el
    mapa, y en móvil se arrastra con dos dedos. */
@@ -65,16 +52,8 @@ function Fitter({ layers, focus }) {
 }
 
 export default function MapCanvas({ layers, focus, onFocusDay }) {
-  const [tiles, setTiles] = useState('topo')
-  const [errors, setErrors] = useState(0)
+  const { modo, setModo, capa, setZoom, onTileError } = useTiles()
   const [armed, setArmed] = useState(false)
-
-  // Fallback a OSM si OpenTopoMap no responde (política de uso justo / caídas).
-  useEffect(() => {
-    if (errors > 6 && tiles === 'topo') setTiles('osm')
-  }, [errors, tiles])
-
-  const t = TILES[tiles]
 
   return (
     <div className={styles.canvas}>
@@ -85,20 +64,27 @@ export default function MapCanvas({ layers, focus, onFocusDay }) {
         className={styles.leaflet}
         aria-label="Mapa del viaje con las rutas elegidas y los trayectos en coche"
       >
-        <TileLayer
-          key={tiles}
-          url={t.url}
-          attribution={t.attribution}
-          maxZoom={t.maxZoom}
-          eventHandlers={{ tileerror: () => setErrors((n) => n + 1) }}
-        />
+        <BaseTiles capa={capa} onTileError={onTileError} />
+        <ZoomWatcher setZoom={setZoom} />
         <GestureGuard onArmed={setArmed} />
         <Fitter layers={layers} focus={focus} />
         <MapLayers layers={layers} onFocusDay={onFocusDay} />
       </MapContainer>
-      <p className={styles.hint} aria-hidden="true">
-        {armed ? 'Zoom con la rueda activado · saca el ratón para desactivarlo' : 'Haz clic en el mapa para hacer zoom con la rueda · en móvil, arrastra con dos dedos'}
-      </p>
+      <div className={styles.bar}>
+        <p className={styles.hint} aria-hidden="true">
+          {armed
+            ? 'Zoom con la rueda activado · saca el ratón para desactivarlo'
+            : 'Haz clic en el mapa para hacer zoom con la rueda · en móvil, arrastra con dos dedos'}
+        </p>
+        <TileSwitch
+          modo={modo}
+          setModo={setModo}
+          capa={capa}
+          className={styles.tileSwitch}
+          botonClassName={styles.tileBtn}
+          activoClassName={styles.tileBtnOn}
+        />
+      </div>
     </div>
   )
 }

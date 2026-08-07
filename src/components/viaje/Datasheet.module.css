@@ -16,6 +16,13 @@
 }
 .row:last-child { border-bottom: none; }
 .row:nth-child(odd) { background: rgba(255, 255, 255, .045); }
+
+/* Cifras de la alternativa activa: cambian con la pestaña, así que se separan
+   visualmente de la logística de la jornada, que no cambia nunca. */
+.hi { background: var(--ibon-100) !important; }
+.hi .k { color: var(--ibon-600); }
+.hi .v { color: var(--pizarra); font-size: 1.02rem; }
+.hi + .row:not(.hi) { border-top: 1px solid var(--ibon-200); }
 .k {
   font-family: var(--font-mono);
   font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;

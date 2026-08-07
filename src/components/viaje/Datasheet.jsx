@@ -7,7 +7,10 @@ export default function Datasheet({ rows }) {
   return (
     <div className={styles.datasheet} role="table" aria-label="Datos del día">
       {rows.map((r, i) => (
-        <div className={styles.row} key={i}>
+        /* `hi` = fila que viene de la alternativa activa (distancia, desnivel…) y
+           por tanto cambia al cambiar de plan. Se destaca para que no se
+           confunda con la logística del día, que es la misma siempre. */
+        <div className={`${styles.row} ${r.hi ? styles.hi : ''}`} key={i}>
           <span className={styles.k}>
             <Icon name={r.icon} />
             {r.label}

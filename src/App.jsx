@@ -8,6 +8,7 @@ import Timeline from './components/Timeline.jsx'
 import Viaje from './components/viaje/Viaje.jsx'
 import MapaViaje from './components/mapaviaje/MapaViaje.jsx'
 import Plazas from './components/Plazas.jsx'
+import Refugios from './components/refugios/Refugios.jsx'
 import Top from './components/Top.jsx'
 import Material from './components/Material.jsx'
 import Footer from './components/layout/Footer.jsx'
@@ -25,6 +26,7 @@ export default function App() {
             <Viaje />
             <MapaViaje />
             <Plazas />
+            <Refugios />
             <Top />
             <Material />
           </main>

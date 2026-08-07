@@ -1,0 +1,166 @@
+/* El día contado desde la alternativa activa. Dentro del bloque oscuro .viaje. */
+
+.panel { animation: pfade .28s ease both; }
+@keyframes pfade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+/* ---- Columna izquierda: lo que antes era el texto del día ---------------- */
+.contenido { display: grid; gap: 1.1rem; align-content: start; }
+
+.tipo {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ibon);
+}
+.nombre {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-top: -.6rem;
+}
+.desc { color: var(--pizarra); font-size: 1.05rem; line-height: 1.7; }
+
+.pc { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.pcList { display: grid; gap: .35rem; }
+.pcList li { display: flex; gap: .5rem; align-items: flex-start; font-size: .9rem; }
+.pcList li svg { width: 15px; height: 15px; margin-top: .2rem; flex: none; }
+.pro li svg { color: var(--ok); }
+.con li svg { color: var(--warn); }
+
+.when { border-top: 1px dashed var(--roca); padding-top: .9rem; font-size: .92rem; }
+.when :global(.mini-h) { margin-top: 0; }
+.when p { color: var(--musgo); }
+
+/* El botón sigue siendo el único gesto que DECIDE (la pestaña solo navega),
+   así que pesa más que cualquier otro control del día. */
+.pick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  padding: .85rem 1rem;
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ibon-600);
+  background: var(--ibon-100);
+  border: 1px solid var(--ibon-200);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+.pick:hover { background: var(--ibon-200); }
+.pick svg { width: 17px; height: 17px; }
+.picked { background: var(--ibon); border-color: var(--ibon); color: #08221c; }
+.picked:hover { background: var(--ibon-600); }
+
+/* ---- Columna derecha: foto, perfil y ficha fusionada -------------------- */
+.lateral { display: grid; gap: 1rem; }
+
+.foto {
+  position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-lg);
+  aspect-ratio: 16 / 10;
+  isolation: isolate;
+}
+.foto svg { width: 100%; height: 100%; }
+.fotoTag { position: absolute; left: 1rem; top: 1rem; z-index: 2; }
+.fotoCap {
+  position: absolute; left: 1.1rem; bottom: 1rem; right: 1.1rem; z-index: 2;
+  color: #fff; font-family: var(--font-mono); font-size: .74rem; letter-spacing: .05em;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .5);
+}
+
+.perfil {
+  background: linear-gradient(180deg, var(--niebla) 0%, var(--nieve) 100%);
+  border: 1px solid var(--roca-2);
+  border-radius: var(--r-sm);
+  padding: .6rem .7rem .25rem;
+}
+.perfil svg { width: 100%; height: 64px; }
+.perfilCap {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: .68rem; color: var(--musgo-2); letter-spacing: .05em;
+}
+
+/* ---- Tiempo, a lo ancho -------------------------------------------------- */
+.meteo {
+  margin-top: clamp(1.4rem, 3vw, 2rem);
+  border: 1px solid var(--roca);
+  border-radius: var(--r-md);
+  background: var(--nieve);
+  padding: 1rem 1.1rem 1.1rem;
+}
+.meteoHead { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; margin-bottom: .7rem; }
+.meteoHead svg { width: 19px; height: 19px; color: var(--alpen); align-self: center; }
+.meteoHead h5 {
+  font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; font-size: 1.1rem;
+}
+.meteoAlt { font-family: var(--font-mono); font-size: .7rem; color: var(--musgo-2); letter-spacing: .04em; }
+
+.alcance {
+  display: flex; gap: .5rem; align-items: flex-start;
+  font-size: .84rem; color: var(--musgo);
+  background: var(--ibon-100);
+  border-left: 3px solid var(--ibon-200);
+  padding: .6rem .75rem;
+  margin-bottom: .8rem;
+}
+.alcance svg { width: 16px; height: 16px; flex: none; margin-top: .12rem; color: var(--ibon); }
+.fuera { background: var(--alpen-100); border-left-color: var(--alpen-200); }
+.fuera svg { color: var(--alpen); }
+
+/* El widget es una página clara: fondo papel para que no parpadee en blanco. */
+.marco { border-radius: var(--r-sm); overflow: hidden; background: #f7f8f6; position: relative; }
+.iframe { width: 100%; height: 100%; border: 0; display: block; }
+.cargando {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: .74rem; letter-spacing: .05em; color: #6c7a74;
+}
+
+.pie {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap; margin-top: .8rem;
+}
+.enlaces { display: flex; gap: .5rem; flex-wrap: wrap; }
+.enlaces a {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-family: var(--font-mono); font-size: .7rem; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--ibon-600); text-decoration: none;
+  border: 1px solid var(--ibon-200); background: var(--ibon-100);
+  border-radius: var(--r-pill); padding: .35rem .75rem;
+}
+.enlaces a:hover { background: var(--ibon-200); }
+.enlaces svg { width: 14px; height: 14px; }
+
+.fuente { font-size: .73rem; color: var(--musgo-2); flex: 1 1 16rem; line-height: 1.5; }
+.fuente a { color: var(--musgo); }
+
+.aviso { font-size: .85rem; color: var(--musgo); }
+.aviso code {
+  font-family: var(--font-mono); font-size: .8rem;
+  background: var(--roca-2); padding: .1rem .3rem; border-radius: 4px;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .pc { grid-template-columns: 1fr; }
+}

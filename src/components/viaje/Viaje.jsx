@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { dias } from '../../data/dias.js'
 import { useViajeNav } from '../../context/ViajeNavContext.jsx'
 import ViajeTabs from './ViajeTabs.jsx'
@@ -10,8 +11,22 @@ import styles from './Viaje.module.css'
    redefiniendo los tokens en .viaje (Viaje.module.css): al heredarse por
    cascada, todos los hijos (Day, PlanCard, CompareTable…) pasan a oscuro. */
 export default function Viaje() {
-  const { view, sectionRef, panelsRef } = useViajeNav()
+  const { view, sectionRef, panelsRef, tabsRef } = useViajeNav()
   const activeDay = dias.find((d) => d.id === view)
+
+  /* La barra de alternativas de cada día se pega JUSTO DEBAJO de esta, así que
+     necesita saber cuánto mide. Se publica como variable en el bloque en vez de
+     cablear un número: la barra cambia de alto entre móvil y escritorio. */
+  useEffect(() => {
+    const barra = tabsRef.current
+    const bloque = sectionRef.current
+    if (!barra || !bloque || typeof ResizeObserver !== 'function') return
+    const medir = () => bloque.style.setProperty('--viaje-tabs-h', `${barra.offsetHeight}px`)
+    medir()
+    const ro = new ResizeObserver(medir)
+    ro.observe(barra)
+    return () => ro.disconnect()
+  }, [tabsRef, sectionRef])
 
   return (
     <section id="viaje" className={styles.viaje} ref={sectionRef}>

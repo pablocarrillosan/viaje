@@ -26,6 +26,7 @@ export default function Nav() {
           </a>
           <a href="#mapa-viaje">Mapa del viaje</a>
           <a href="#plazas">Plazas</a>
+          <a href="#refugios">Refugios</a>
           <a href="#top-rutas">Top rutas</a>
           <a href="#material">Material</a>
           <a className={`${styles.cta} btn btn--primary`} href="#viaje">

@@ -95,14 +95,14 @@ viaje/
     │   ├── SvgArt.jsx     ← Landscape/Profile (resuelve .svg por clave con import.meta.glob)
     │   ├── ui/{Rating, RichText}.jsx
     │   ├── layout/{Nav,Hero,Footer} · Map · Timeline · Top · Material
-    │   ├── viaje/{Viaje,ViajeTabs,Day,Datasheet,PlanCarousel,PlanCard,CompareTable,Nearby,TripSummary}
+    │   ├── viaje/{Viaje,ViajeTabs,Day,PlanTabs,PlanPanel,Datasheet,CompareTable,Nearby,PlazasChip,TripSummary}
     │   └── mapaviaje/{MapaViaje,MapCanvas,MapLayers,MapLegend}.jsx + deriveLayers.js
     ├── hooks/{useTripSelection,useMapBounds}.js
     └── context/{ViajeNavContext,TripContext}.jsx
 ```
 
 **El contenido SÍ está separado en datos** (`src/data/`): cada día y cada plan es un objeto JS;
-componentes genéricos (`Day`, `PlanCard`…) los renderizan. Las ilustraciones se referencian por
+componentes genéricos (`Day`, `PlanPanel`…) los renderizan. Las ilustraciones se referencian por
 **clave** (`art`/`profile` → ficheros `.svg`) y los iconos por **nombre** (`icon` → `<Icon>`).
 
 ## Estructura de `index.html`
@@ -120,12 +120,17 @@ por defecto, `dia-1`. Los demás bloques son las secciones originales.
 | Itinerario | `#itinerario` | claro | Timeline de 10 `.tl-item` (cada uno con `data-goto` a su día del bloque) |
 | **Viaje** | `#viaje` | **oscuro** | **Bloque con pestañas**: `.viaje__tabs` (D01–D10 + Tu viaje) + paneles `dia-1`…`dia-10` (anatomía abajo) + panel `tu-viaje` (resumen, `#trip-summary`) |
 | **Mapa de tu viaje** | `#mapa-viaje` | claro | **Mapa Leaflet real**: rutas elegidas + trayectos en coche (ver sección propia abajo) |
+| **Refugios** | `#refugios` | claro | **Mapa Leaflet** de los 53 refugios guardados y libres de los 4 valles + vertiente francesa (ver sección propia abajo) |
 | Top rutas | `#top` | claro | Ranking de rutas destacadas |
 | Material | `#material` | claro | Equipo recomendado |
 | Footer | `.footer` | claro | Cierre (fuera de `#viaje`) |
 | Script | — | — | JS de **pestañas de `#viaje`** + **selección de planes** |
 
-### Anatomía de un día (`<section class="day" id="dia-N">`)
+### Anatomía de un día — ⚠ OBSOLETA (así era en `legacy/`)
+
+> El día ya no es «contenido + carrusel de tarjetas». Desde agosto de 2026 la jornada **es** la
+> alternativa activa, con una barra de pestañas propia: ver **«La jornada ES la alternativa
+> activa»** más abajo. Se deja esto como mapa de la web estática de `legacy/`.
 
 1. `.day__head` — número, `.eyebrow` (zona) y `<h3>` (título).
 2. `.day__grid`:
@@ -134,16 +139,18 @@ por defecto, `dia-1`. Los demás bloques son las secciones originales.
    - `.day__photo-wrap` — foto SVG (`.dayphoto`) + `.datasheet` (ficha clave/valor).
 3. `.plans-head` + `.carousel` — tarjetas `<article class="plan">` (alternativas A, B, C…).
 4. `.compare-wrap` — tabla comparativa de las alternativas.
-5. `.nearby` — **bloque "Pueblos y paradas cerca"** (añadido en esta iteración).
+5. `.nearby` — **bloque "Pueblos y paradas cerca"**.
 
-### Anatomía de un plan (`<article class="plan">`)
+### Anatomía de un plan (`<article class="plan">`) — ⚠ OBSOLETA
+
+Los mismos campos siguen vivos **como datos** (`type`, `name`, `desc`, `profile`, `stats`, `pros`,
+`cons`, `when`), pero ya no se pintan como tarjeta de carrusel: los renderiza `PlanPanel` a lo
+ancho de la jornada.
 
 `.plan__img` (SVG) · `.plan__badge {a|b|c|d|e|f|g}` · `.plan__rate` · `.plan__type` ·
 `.plan__name` · `.plan__desc` · `.profile` (perfil de altimetría) ·
 `.plan__stats` (Distancia / Desnivel / Tiempo / Tipo) · `.plan__pc` (A favor / En contra) ·
 `.plan__when` ("Cuándo elegirla") · `button.plan__pick`.
-
-El botón lleva `data-day="N"`, `data-plan="X"` y `data-name="…"`: son el gancho del selector.
 
 ## Selección de planes (JS)
 
@@ -200,6 +207,7 @@ que pinta, a partir de la selección de planes, la **ruta de montaña** de cada 
 | `bases.js` | Las 6 bases donde se duerme + hitos de carretera + bbox del Pirineo |
 | `tramos.js` | Los 6 trayectos en coche: polilínea, tiempo, km y vía |
 | `tracks.js` | Un track por ruta, con `path` y `pois`, indexado por clave `dNx` |
+| `refugios.js` | Los 53 refugios de la sección `#refugios` + las 4 `ZONAS` y las `FUENTES` |
 
 ⚠ **Los trazados son APROXIMADOS.** Las carreteras se dibujan pasando por pueblos y puertos
 reales (no vienen de un router); las rutas de montaña se interpolan entre waypoints verificados
@@ -319,7 +327,255 @@ Disponibilidad real de las tres noches en refugio, del 21 al 30 de agosto. Va de
 - ⚠ **GitHub desactiva los workflows programados** en repos sin actividad durante 60 días.
   Si la web deja de actualizarse sola, míralo ahí antes que en el código.
 
+## Sección «Refugios» (`#refugios`)
+
+Mapa Leaflet con **todos los refugios guardados y libres** de los cuatro valles del viaje y de
+la **vertiente francesa colindante**. Va después de `#plazas`, en tema **claro**, con ancla propia.
+Complementa a `#plazas`: aquella dice *cuántas plazas quedan* en los 3 refugios donde dormimos,
+esta dice *qué refugios existen* y cuáles sirven de plan B.
+
+- **Datos: `src/data/geo/refugios.js`** — 53 entradas con `tipo` (`guardado` | `libre` | `cerrado`),
+  `zona`, `pais`, `alt`, `plazas`, `coords`, `dias`, `planes`, `dormible` y `nota`. Las 4 `ZONAS`
+  (Tena, Ordesa, Hecho, Ansó) también viven ahí. **Añadir un refugio = añadir un objeto**; el mapa,
+  los contadores, la lista y el `<details>` textual se generan solos.
+- **Dos marcas de alcance, independientes (no son una escala):**
+  - **`planes: ['3D', …]`** → el refugio cae en el recorrido de esos planes, contando **las 52
+    alternativas** de los diez días, no solo las recomendadas. En el mapa sale con **anillo ámbar
+    discontinuo** y en la lista con la etiqueta de los planes. Vacío = fuera de ruta. **17 de 53.**
+  - **`dormible: true`** → podrías pasar allí la noche sin romper el itinerario: noche prevista,
+    recambio declarado de esa noche, o base de valle de esa jornada. **11 de 53.**
+  - Son ortogonales a propósito: Alfonso XIII está en ruta y no es cama (está cerrado); el refugio
+    forestal de **Zuriza es cama y no está en ruta** (se pasa por delante **en coche**, no en
+    ninguna ruta a pie, y `planes` solo admite planes de a pie).
+  - ⚠ **No infles `dormible`.** Si se marca todo refugio guardado alcanzable en el día, la marca
+    deja de significar nada y no se puede usar para decidir. Ante la duda, `false`.
+  - **`check:geo` valida que cada plan citado exista** (día + letra) y avisa si un refugio tiene
+    `planes` pero `dias: []`. Al renombrar la letra de un plan, esta marca se entera.
+  - El anillo se dibuja como **capa aparte con `interactive={false}`**: si no, se come el clic del
+    marcador que tiene debajo y el popup no abre.
+- **De dónde salen los datos (7-ago-2026):**
+  - **Cabañas libres y refugios franceses → API de [refuges.info](https://www.refuges.info)**
+    (CC BY-SA 2.0), endpoint `bbox` en **formato CSV** (`?bbox=…&format=csv&type_points=7,10`).
+    ⚠ Pide **CSV, no GeoJSON**: las respuestas JSON no se pueden leer con las herramientas de
+    fetch de este entorno, y el bbox entero de golpe supera el límite de tamaño — hay que
+    trocearlo en 4-5 rectángulos.
+  - **Refugios guardados españoles → FAM (fam.es) y alberguesyrefugios.com.** refuges.info **no**
+    tiene Góriz, Lizara, Pineta, Casa de Piedra ni Bujaruelo: hubo que buscarlos aparte.
+  - **Lizara y Casa de Piedra** se situaron convirtiendo sus **coordenadas UTM 30T publicadas**
+    (`pyproj`, EPSG:32630 → 4326), que es el único dato geográfico que dan sus fichas.
+  - **Respomuso, Góriz, Linza, Bujaruelo y Selva de Oza reutilizan las coordenadas del proyecto**
+    (`bases.js` / `tracks.js`), no las de terceros. ⚠ refuges.info sitúa el refugio de Linza en
+    42.898, −0.799 (1,9 km al sur del valor del proyecto): se mantuvo el nuestro para no
+    contradecir al resto de la web, y `check:geo` vigila que ambos ficheros no se separen.
+- ⚠ **«Libre» no es «reservado».** Son cabañas abiertas y gratis, sin guarda: en agosto pueden
+  estar llenas, sucias o cerradas, y **las plazas son estimaciones de quien las visitó**, no un
+  aforo. Este matiz está escrito en la leyenda y en el aviso al pie: **no lo quites.**
+- **Los `cerrado`** (Alfonso XIII, cabane d'Arrious) se quedan a propósito, tachados y en gris:
+  aparecen en guías y mapas viejos, y conviene que se vea que no sirven.
+- **`npm run check:geo` los valida**: bbox, ids duplicados, zona/tipo/país válidos, altitud
+  plausible, que los `dias` existan y que Respomuso/Góriz/Linza **coincidan con `bases.js`**
+  (tolerancia 200 m).
+- **Leaflet en diferido**, igual que `#mapa-viaje` y **compartiendo su chunk**: la sección nueva
+  solo añade 3,4 kB (`RefugiosCanvas`). Misma regla de gestos (rueda tras clic, dos dedos en móvil).
+
+## Los dos mapas Leaflet comparten capa base (`components/mapaviaje/tiles.jsx`)
+
+`#mapa-viaje` y `#refugios` usan el MISMO módulo de teselas: `useTiles()` (estado + caída
+automática), `<BaseTiles>` y `<TileSwitch>`. Si arreglas un problema de teselas, se arregla en
+los dos. **No vuelvas a copiar el objeto `TILES` dentro de un canvas.**
+
+- ⚠ **El contenedor del mapa DEBE crear contexto de apilamiento** (`isolation: isolate` +
+  `position: relative` + `z-index: 0` en `.canvas`). Leaflet reparte z-index de **200 a 1000**
+  entre sus paneles y controles; la nav fija está en **100**. Sin ese contexto, los z-index de
+  Leaflet se comparan con los de la página y **el mapa se dibuja por encima de la nav**. Con él,
+  todo lo de Leaflet se apila solo dentro del recuadro. Subir el z-index de la nav sería un
+  parche: el `.leaflet-control` está en 1000 y siempre habría otro número mayor.
+- ⚠ **OpenTopoMap solo renderiza hasta z17.** La capa declara `maxNativeZoom: 17` y
+  `maxZoom: 19`: Leaflet reescala la tesela de z17 (borrosa pero legible) en vez de pedir
+  teselas que no existen. Antes, `maxZoom: 17` a secas capaba el zoom y las peticiones fallidas
+  pintaban la imagen de error del servidor.
+- ⚠ **`errorTileUrl` es una tesela transparente de 1×1.** Cuando OpenTopoMap responde con un
+  error (429 por uso excesivo, 404), el navegador pintaba **la imagen de error del propio
+  servidor** — de ahí los recuadros rojos que tapaban el mapa a ciertos zooms. Ahora se
+  sustituyen por nada y se ve el fondo de papel (`.leaflet-tile { background: var(--nieve) }`).
+- ⚠ **Por debajo de `UMBRAL_RELIEVE` (z12) NO se usa OpenTopoMap.** Su sombreado, visto de lejos,
+  es un **marrón rojizo** que se come el mapa: se notaba justo en los días de traslado (4, 7 y 8),
+  que se alejan para que quepa el trayecto entero. Debajo de z12 se pinta **CARTO Positron**
+  (gris claro, casa con la paleta caliza y hace destacar el turquesa y el ámbar); de z12 para
+  arriba vuelve el relieve, que es donde sirve de algo (curvas de nivel, sendas).
+- **Con el zoom aún sin medir se elige «claro»**: los dos mapas arrancan encuadrando todo el
+  Pirineo (z9-10), así que empezar en «topo» provocaba un parpadeo marrón en el primer render.
+- **Conmutador «Auto / Relieve / Claro»** en la barra inferior de ambos mapas. `modo` es lo que
+  elige la persona y `capa` lo que se pinta; elegir a mano congela la capa y el zoom ya no la
+  cambia. Hace falta porque OpenTopoMap sirve teselas malas que **no siempre llegan como fallo
+  HTTP**, así que la caída automática (a los 3 errores) no las detecta.
+- **`ZoomWatcher` va DENTRO del `<MapContainer>`** (es donde `useMap()` tiene contexto) y recibe
+  el `setZoom` de `useTiles` tal cual: una función de estado es estable, así que el efecto no
+  entra en bucle. No le pases una lambda.
+
+## Tiempo previsto por plan (meteoblue)
+
+Cada una de las **53 alternativas** tiene su propia previsión: al elegir un plan, el día abre el
+bloque **«Tu plan para este día»** (`viaje/PlanElegido.jsx`) con la ficha completa de esa
+alternativa y el **widget de meteoblue** en su punto alto.
+
+- **El widget iframe, no la API.** `my.meteoblue.com` pide API key y esa clave no puede viajar en
+  un bundle público. El **widget** es gratis, sin clave, sin script de terceros y sin CORS. Coste:
+  no se pueden leer los datos, así que no hay chips ni resúmenes propios — se ve la caja y ya.
+- **`src/data/geo/meteo.js`** — un punto por plan, **misma convención de clave** que
+  `art`/`profile`/`tracks`: plan B del día 5 → `d5b`. Añadir un plan = añadir su clave; ningún
+  componente cambia.
+- ⚠ **El punto es el MÁS ALTO de la ruta, no el aparcamiento.** En estos planes hay hasta 2.000 m
+  entre la salida y la cima: unos 12 °C y otro régimen de viento. Comprobado contra la propia
+  meteoblue el 7-ago-2026: Góriz (2.200 m) daba 23/14 °C y Monte Perdido (3.355 m), 14/4 °C, el
+  mismo día y a 3 km de distancia.
+- **La altitud va en la URL** (`{lat}N{lon}E{alt}_Europe%2FMadrid`) y meteoblue la usa para
+  corregir la temperatura. Si no se declara, la saca de su modelo de elevación y sale otra cosa
+  (2.250 en vez de 2.200 en Góriz). Por eso `alt` se escribe a mano y `check:geo` la valida.
+- **La coordenada da igual afinarla**: el modelo trabaja con malla de 4-30 km (NEMS-4 es el más
+  fino de la zona), así que ±1 km no cambia el pronóstico. Lo que importa es la altitud.
+- ⚠ **meteoblue solo pronostica 7 días.** No es un ajuste que se pueda subir. Con el viaje a 14-23
+  días vista, el bloque **dice cuántos faltan** y avisa de que lo que se ve abajo es el tiempo de
+  esta semana en ese punto, **no el del viaje**. Se enlazan además la página de **14 días** y el
+  **meteograma multimodelo**, que es lo honesto a esa distancia: enseña cuánto se pelean los
+  modelos entre sí en vez de un número que aún no se sostiene.
+- **Sin plan elegido** el bloque sale igual con el **plan recomendado** (fila `reco` de la
+  comparativa, la misma función `recoPlan` que usa el mapa) y en modo «sugerencia»: borde
+  discontinuo y apagado. La web no puede recomendar una cosa en el mapa y otra aquí.
+- **El iframe se monta en diferido** (`IntersectionObserver`): solo se renderiza el panel del día
+  activo, así que hay como mucho una petición a meteoblue a la vez, y solo si se ve.
+- **`src/data/noches.js` → `fechaDia(num)`** es el puente día → fecha ISO (día 1 = 21 ago).
+- **`npm run check:geo`** valida los 53 puntos: bbox, que la clave corresponda a un plan real, que
+  no falte ninguno, altitud entre 300 y 3.500 m, y que —si el plan tiene track— el punto caiga a
+  menos de 3 km del trazado. Además avisa si un plan de cima declara un punto por debajo de 2.000 m
+  (síntoma clásico de copiar-pegar el punto del valle).
+- **`npm run check:render`** (nuevo) monta `#viaje` en jsdom y comprueba lo que un `vite build` no
+  ve: que elegir un plan cambia el día entero, que el iframe aparece y que su URL lleva la altitud
+  del punto de ESE plan. Sustituye al arnés que se rehacía a mano en cada iteración.
+
+## La jornada ES la alternativa activa (`Day.jsx`)
+
+**No hay carrusel de tarjetas.** Dentro de cada día hay una **segunda barra de pestañas** (una por
+alternativa + «Comparar») y el contenido de abajo es el de la alternativa activa. No es un bloque
+que se añade al día: **es** el día.
+
+```
+cabecera            número · fecha · zona · título del día · chips   ← lo único invariable
+PlanTabs            Plan A … Plan F · Comparar                       ← sticky bajo la barra de días
+PlanPanel           descripción, a favor/en contra, cuándo elegirla, botón de elegir
+                    foto del plan · perfil · ficha FUSIONADA · meteoblue a lo ancho
+DeLaJornada         recomendación, proscons, consejos, material, pueblos
+```
+
+- ⚠ **Pestaña ≠ elección.** La pestaña es estado local (`useState` en `Day`): sirve para curiosear.
+  Lo que persiste en `TripContext` — y por tanto lo que pintan `#mapa-viaje` y «Tu viaje» — sigue
+  siendo el botón **«Elegir este plan»** del panel. Si se fusionan las dos cosas, mirar el plan C
+  te cambiaría el itinerario sin querer.
+- **La pestaña arranca en el plan elegido; si no hay ninguno, en el recomendado** (fila `reco` de la
+  comparativa, misma `recoPlan` que el mapa). Al elegir, la vista salta a ese plan: decidir y mirar
+  no pueden acabar en dos sitios distintos.
+- **El plan elegido lleva ✓ en su pestaña** aunque estés mirando otra: si no, no habría forma de
+  saber cuál habías decidido.
+- **La ficha va fusionada a propósito**: arriba las cifras del plan (marcadas con `hi: true`, fondo
+  turquesa) y debajo la logística del día — traslado, base, lanzadera, cobertura —, que es la misma
+  elijas lo que elijas. Dos tablas separadas obligaban a mirar en dos sitios para responder «¿a qué
+  hora salgo?».
+- **`DeLaJornada`** recoge lo que sobrevive a la elección y va bajo un rótulo que lo dice
+  («De la jornada, elijas lo que elijas»). Si algo de ahí empieza a depender del plan, se mueve al
+  panel, no al revés.
+- ⚠ **`PlanTabs` se pega bajo `ViajeTabs`**, así que necesita saber cuánto mide la de arriba:
+  `Viaje.jsx` la mide con un `ResizeObserver` y publica **`--viaje-tabs-h`** en el bloque. No
+  cablees un número: la barra cambia de alto entre móvil y escritorio. Z-index 30 (la de días
+  está en 40).
+- **Añadir un plan sigue siendo añadir un objeto** a `plans`: pestaña, panel, ficha y previsión se
+  generan solos. Se necesitan sus dos SVG (`landscapes/dNx.svg`, `profiles/dNx.svg`), su columna en
+  `compare` y su clave en `meteo.js`.
+
 ## Changelog
+
+### 2026-08-07 — El día se reescribe con la alternativa: pestañas de plan, adiós al carrusel
+- **`PlanCarousel` y `PlanCard` eliminados.** En su lugar, `PlanTabs` (barra de alternativas) +
+  `PlanPanel` (la jornada contada desde el plan activo). `PlanElegido`, del cambio anterior, se
+  disuelve dentro de `PlanPanel`: ya no es un bloque aparte porque el día entero es el plan.
+- **El texto del día pasa a ser el del plan.** `day.desc` ya no se pinta; manda `plan.desc`. Lo que
+  no depende de la alternativa (recomendación, consejos, material, pueblos) baja a `DeLaJornada`.
+- **Ficha fusionada** (`Datasheet` acepta `hi: true`): cifras de la ruta arriba y destacadas,
+  logística del día debajo.
+- **Nueva variable `--viaje-tabs-h`**, medida con `ResizeObserver` en `Viaje.jsx`, para que la barra
+  de alternativas se pegue justo bajo la de días sin números cableados.
+- **Se descartaron tres alternativas de diseño**: sustitución in situ conservando el carrusel,
+  tocar solo la columna derecha, y una hoja de ruta cronológica con el tiempo por franja horaria
+  (esta última pedía inventar horarios para las 53 alternativas, que hoy no son un dato).
+- **Verificado**: `npm run check:render` (18 comprobaciones, incluida «no se cuela el texto de las
+  otras alternativas», 0 errores de consola), `npm run check:geo` y `vite build` (271 módulos, el
+  CSS baja de 56,0 a 53,2 kB al irse el carrusel).
+
+### 2026-08-07 — Tiempo previsto de cada plan con meteoblue + el día reacciona a la elección
+- **Nuevo bloque «Tu plan para este día»** dentro de cada jornada: al pulsar «Elegir este plan» el
+  día entero cambia (chip en la cabecera, foto de portada del plan) y se despliega la ficha
+  completa de esa alternativa con **la previsión de meteoblue en su punto alto**.
+- **`src/data/geo/meteo.js`**: 53 puntos, uno por alternativa, con nombre, coordenada, **altitud** y
+  tipo. Clave `dNx`, la de siempre. Los 13 planes con track reutilizan su coordenada.
+- **Widget iframe, no API**: la API de meteoblue pide clave y no puede ir en un bundle público. Se
+  comprobó contra su servidor que el widget acepta `{lat}N{lon}E{alt}_Europe%2FMadrid` sin login y
+  que **la altitud declarada cambia el parte** (Góriz 2.200 → 23/14 °C; Monte Perdido 3.355 → 14/4).
+- ⚠ **Horizonte de 7 días**: el viaje está a 14-23 días, así que hoy el widget **no** enseña los
+  días del viaje. En vez de disimularlo, el bloque cuenta los días que faltan y enlaza los 14 días
+  y el meteograma multimodelo.
+- **`check:geo` amplía cobertura** a los puntos meteo (cobertura de los 53, bbox, altitud creíble,
+  distancia al track del propio plan, aviso si un plan de cima apunta al valle).
+- **Nuevo `npm run check:render`**: render headless de `#viaje` en jsdom, con el arnés ya
+  committeado en vez de rehecho a mano. 12 comprobaciones, 0 errores de consola.
+- **Verificado**: `npm run check:geo` (13 tracks, 6 tramos, 53 refugios, 53/53 puntos meteo, sin
+  errores), `npm run check:render` (todo en verde) y `vite build` (273 módulos).
+
+### 2026-08-07 — Capa base por zoom: se acabó el marrón rojizo al alejar
+- **Síntoma**: en los días 4, 7 y 8 (los de traslado, que encuadran todo el trayecto) el mapa
+  salía de un marrón rojizo ilegible. **No era un error de teselas**: es el sombreado de relieve
+  de OpenTopoMap visto de lejos.
+- **Arreglo**: capa base según el zoom. Debajo de **z12** (`UMBRAL_RELIEVE`) se pinta **CARTO
+  Positron** (gris claro); de z12 para arriba, OpenTopoMap. El conmutador pasa de dos botones a
+  **«Auto / Relieve / Claro»**; elegir a mano congela la capa.
+- **Nuevo `ZoomWatcher`** en `tiles.jsx` y `useTiles` devuelve ahora `{ modo, setModo, capa,
+  setZoom, onTileError }`. Con el zoom sin medir se arranca en «claro» para no parpadear.
+- **Verificado**: tabla de decisión de `capa` probada con los 8 casos (zoom 9/11/12/14/null,
+  errores, y los dos modos manuales) y `npm run build` (270 módulos).
+
+### 2026-08-07 — Mapas: z-index sobre la nav y teselas rotas de OpenTopoMap
+- **El mapa tapaba la barra de navegación.** Causa: Leaflet usa z-index de 200 a 1000 y la nav
+  está en 100, sin ningún contexto de apilamiento que los separase. Arreglado con
+  `isolation: isolate; z-index: 0` en `.canvas` de las dos secciones (no subiendo el de la nav).
+- **Teselas rojas a ciertos zooms.** Eran las imágenes de error de OpenTopoMap. Ahora la capa
+  declara `errorTileUrl` (tesela transparente) y `maxNativeZoom: 17` para reescalar en vez de
+  pedir teselas inexistentes por encima de z17.
+- **Nuevo `components/mapaviaje/tiles.jsx`** con `useTiles` / `<BaseTiles>` / `<TileSwitch>`:
+  la config de teselas estaba **duplicada** en `MapCanvas` y `RefugiosCanvas` y ya había
+  divergido. Añade conmutador manual «Relieve / Mapa» en ambos mapas.
+- **Verificado**: `npm run build` (270 módulos), `check:geo` sin errores y comprobado sobre el
+  CSS compilado que Leaflet llega a z-index 1000 frente a los 100 de la nav — que es justo lo
+  que el contexto de apilamiento neutraliza.
+
+### 2026-08-07 — Sección «Refugios» (`#refugios`): guardados y libres de los cuatro valles
+- **Nueva sección clara tras `#plazas`**, con ancla en la nav: mapa Leaflet con **53 refugios**
+  (23 guardados, 28 libres, 2 fuera de servicio) de Tena, Ordesa, Hecho y Ansó **más la
+  vertiente francesa** colindante (Marcadau, Ossau, Gavarnie, Vignemale, Ansabère, Arlet).
+- **Filtros**: chip por valle + interruptores «Guardados» / «Libres» / «Solo España» / «Solo los
+  que pillan de camino», contadores en vivo (en ruta / sirven de cama / fuera de alcance), lista
+  lateral enfocable, leyenda y `<details>` con la lista completa valle por valle (el mapa no puede
+  ser la única fuente).
+- **Marcas de alcance** `planes` + `dormible` cruzando los 53 refugios con **las 52 alternativas**
+  de los diez días: 17 caen en alguna ruta, 11 sirven de cama, 35 quedan fuera. Se curaron a mano
+  a partir de los planes reales; **la proximidad geométrica a los tracks NO sirve** para esto (son
+  bocetos interpolados y solo existen 13 de 52, así que dejaba fuera cosas como Casa de Piedra —
+  final del plan 3D — y metía cabañas que solo están cerca en línea recta).
+- **`src/data/geo/refugios.js`** nuevo, con las fuentes y su precisión documentadas en cabecera.
+- **`check:geo` amplía cobertura** a los refugios y, sobre todo, comprueba que los tres donde se
+  duerme no se separen de `bases.js`.
+- **Verificado**: `npm run check:geo` (13 tracks, 6 tramos, 53 refugios, sin errores),
+  `npm run build` (269 módulos) y render SSR headless — los 53 refugios pintados, contadores
+  23/28/2 y las 4 zonas en la lista textual.
+- ⚠ **`npm run build` falla en este entorno al vaciar `dist/`** (EPERM sobre la carpeta montada),
+  no por el código: se comprobó con `npx vite build --outDir /tmp/dist-check`.
 
 ### 2026-08-04 — Disponibilidad real de refugios en la web (`#plazas`) + vigía por email
 - **Encontrada la API que alimenta el calendario oficial.** El widget de reservas de

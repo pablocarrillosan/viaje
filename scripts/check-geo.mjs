@@ -15,6 +15,8 @@ import { dias } from '../src/data/dias.js'
 import { tracks } from '../src/data/geo/tracks.js'
 import { tramos, KM_COCHE_TOTAL } from '../src/data/geo/tramos.js'
 import { bases, hitos } from '../src/data/geo/bases.js'
+import { refugios, refugiosById, ZONAS } from '../src/data/geo/refugios.js'
+import { puntos as puntosMeteo, meteoKey } from '../src/data/geo/meteo.js'
 import { rutaEtapas } from '../src/data/mapa.js'
 
 const BBOX = { latMin: 38.0, latMax: 43.2, lonMin: -1.6, lonMax: 0.6 }
@@ -113,8 +115,110 @@ for (const t of tramos) {
   }
 }
 
+/* 6 · Refugios de la sección #refugios -------------------------------------
+   No dibujan nada, pero sí ponen chinchetas en un mapa: validamos que caen en
+   el bbox, que no hay ids repetidos, que la zona/tipo son de los permitidos y
+   —lo importante— que los tres donde se DUERME coinciden con `bases.js`. Si
+   alguien corrige una base y se olvida del refugio, la web se contradice. */
+const TIPOS = new Set(['guardado', 'libre', 'cerrado'])
+const ZONA_IDS = new Set(ZONAS.map((z) => z.id))
+const vistos = new Set()
+for (const r of refugios) {
+  if (vistos.has(r.id)) errores.push(`Refugio con id duplicado: «${r.id}»`)
+  vistos.add(r.id)
+  enBbox(r.coords, `refugio «${r.id}»`)
+  if (!TIPOS.has(r.tipo)) errores.push(`El refugio «${r.id}» tiene un tipo desconocido: ${r.tipo}`)
+  if (!ZONA_IDS.has(r.zona)) errores.push(`El refugio «${r.id}» apunta a la zona inexistente «${r.zona}»`)
+  if (r.pais !== 'ES' && r.pais !== 'FR') errores.push(`El refugio «${r.id}» tiene país «${r.pais}»`)
+  if (!(r.alt > 500 && r.alt < 3000)) errores.push(`Altitud sospechosa en «${r.id}»: ${r.alt} m`)
+  r.dias.forEach((d) => {
+    if (!dias.some((x) => x.day === d)) errores.push(`El refugio «${r.id}» apunta al día ${d}, que no existe`)
+  })
+  /* `planes` es la marca de «cae en el recorrido de esta alternativa»: si el
+     plan citado no existe (se renombró una letra, se borró un plan), la marca
+     miente en el mapa y hay que enterarse aquí, no en la web. */
+  ;(r.planes || []).forEach((ref) => {
+    const m = /^(\d+)([A-G])$/.exec(ref)
+    if (!m) return errores.push(`El refugio «${r.id}» declara el plan «${ref}», que no tiene forma NX`)
+    const dia = dias.find((d) => d.day === Number(m[1]))
+    if (!dia) return errores.push(`El refugio «${r.id}» cita el plan ${ref}: el día ${m[1]} no existe`)
+    if (!dia.plans.some((p) => p.plan === m[2]))
+      errores.push(`El refugio «${r.id}» cita el plan ${ref}, que no existe en el día ${m[1]}`)
+  })
+  if (r.planes?.length && !r.dias.length)
+    avisos.push(`«${r.id}» cae en ${r.planes.join(', ')} pero tiene dias: [] — ¿se te olvidó?`)
+}
+/* Los que además son base del viaje: misma coordenada (tolerancia 200 m). */
+for (const id of ['respomuso', 'goriz', 'linza']) {
+  const r = refugiosById[id]
+  const b = bases.find((x) => x.id === id)
+  if (!r || !b) {
+    errores.push(`Falta «${id}» en refugios.js o en bases.js: la web dice que se duerme ahí`)
+    continue
+  }
+  const d = hav(r.coords, b.coords)
+  if (d > 0.2)
+    errores.push(`«${id}» está en dos sitios: refugios.js y bases.js difieren ${(d * 1000).toFixed(0)} m`)
+}
+
+/* --- Puntos meteo (uno por plan) ---------------------------------------- *
+   El punto de referencia de meteoblue va en la URL con su altitud, así que un
+   número mal puesto no se ve en pantalla: sale un parte plausible pero de otro
+   sitio. Se valida que existan los 52, que caigan en el bbox, que la altitud sea
+   creíble y que, cuando el plan tiene track, el punto esté sobre el trazado. */
+const TIPOS_METEO = new Set(['cima', 'collado', 'ibon', 'refugio', 'valle', 'pueblo'])
+const TOL_METEO_KM = 3
+
+const clavesEsperadas = new Set()
+for (const d of dias) {
+  for (const p of d.plans || []) {
+    const k = meteoKey(d.day, p.plan)
+    clavesEsperadas.add(k)
+    if (!puntosMeteo[k])
+      errores.push(`Falta el punto meteo «${k}» (día ${d.day}, plan ${p.plan} · ${p.name})`)
+  }
+}
+for (const [k, m] of Object.entries(puntosMeteo)) {
+  if (!clavesEsperadas.has(k)) errores.push(`El punto meteo «${k}» no corresponde a ningún plan`)
+  if (!Array.isArray(m.at) || m.at.length !== 2) {
+    errores.push(`El punto meteo «${k}» no tiene coordenada válida`)
+    continue
+  }
+  enBbox(m.at, `punto meteo «${k}»`)
+  if (!TIPOS_METEO.has(m.tipo)) errores.push(`El punto meteo «${k}» tiene tipo desconocido: «${m.tipo}»`)
+  if (!Number.isFinite(m.alt) || m.alt < 300 || m.alt > 3500)
+    errores.push(`Altitud poco creíble en el punto meteo «${k}»: ${m.alt} m`)
+  if (!m.name) errores.push(`El punto meteo «${k}» no tiene nombre`)
+
+  /* Si el plan tiene track, el punto tiene que estar EN la ruta. Ojo: los tracks
+     son bocetos interpolados, de ahí una tolerancia generosa. */
+  const t = tracks[k]
+  if (t) {
+    const cerca = Math.min(...t.path.map((p) => hav(p, m.at)))
+    if (cerca > TOL_METEO_KM)
+      errores.push(
+        `El punto meteo «${k}» (${m.name}) está a ${cerca.toFixed(1)} km del track del mismo plan`,
+      )
+  }
+}
+/* Un plan que sube a una cima y declara punto de valle suele ser un copiar-pegar:
+   el parte saldría 10 °C más caliente de lo que te vas a encontrar arriba. */
+for (const d of dias) {
+  for (const p of d.plans || []) {
+    const m = puntosMeteo[meteoKey(d.day, p.plan)]
+    if (!m) continue
+    if (/cima|pico|tresmil|dosmil|alpin/i.test(p.type) && m.alt < 2000)
+      avisos.push(`«${p.name}» (día ${d.day}) es de cima y su punto meteo está a ${m.alt} m — ¿es el de arriba?`)
+  }
+}
+
 /* --- Informe ------------------------------------------------------------ */
-console.log(`Tracks: ${Object.keys(tracks).length} · Tramos: ${tramos.length} · Bases: ${bases.length}`)
+console.log(
+  `Tracks: ${Object.keys(tracks).length} · Tramos: ${tramos.length} · Bases: ${bases.length} · ` +
+    `Refugios: ${refugios.length} (${refugios.filter((r) => r.tipo === 'guardado').length} guardados, ` +
+    `${refugios.filter((r) => r.tipo === 'libre').length} libres) · ` +
+    `Puntos meteo: ${Object.keys(puntosMeteo).length}/${clavesEsperadas.size}`,
+)
 console.log(`Kilómetros de coche del bucle: ${KM_COCHE_TOTAL}`)
 if (avisos.length) console.log('\nAvisos:\n - ' + avisos.join('\n - '))
 if (errores.length) {
